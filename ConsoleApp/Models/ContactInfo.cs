@@ -2,7 +2,6 @@
 
 namespace ConsoleApp.Models {
     public class ContactInfo {
-        [ForeignKey("User")]
         public ulong Id { get; set; }
         public virtual User User { get; set; } = null!;
 
