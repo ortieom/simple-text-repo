@@ -1,8 +1,8 @@
 ﻿using ConsoleApp.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace ConsoleApp.Data {
-    internal class Context : DbContext {
+namespace DataLib {
+    public class Context : DbContext {
         public DbSet<User> Users { get; set; } = null!;
         public DbSet<Project> Projects { get; set; } = null!;
         public DbSet<Document> Documents { get; set; } = null!;
@@ -10,9 +10,8 @@ namespace ConsoleApp.Data {
 
         public string DbPath { get; }
 
-        public Context() {
-            var path = Environment.CurrentDirectory;
-            DbPath = System.IO.Path.Join(path, "storage.db");
+        public Context(String DataSource) {
+            DbPath = DataSource;
 
             Database.EnsureCreated();
         }
@@ -51,8 +50,8 @@ namespace ConsoleApp.Data {
 
             // constraints
             modelBuilder.Entity<User>()
-                .HasAlternateKey(u => new { u.Name, u.Email});  // unique
-            // length
+                .HasAlternateKey(u => new { u.Name, u.Email });  // unique
+                                                                 // length
             modelBuilder.Entity<User>()
                 .Property(b => b.Name).HasMaxLength(50);
             modelBuilder.Entity<Project>()

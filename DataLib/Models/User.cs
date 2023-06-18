@@ -8,7 +8,7 @@
 
         public string HashedPassword { get; set; } = null!;
 
-        public virtual ContactInfo ContactInfo { get; set; } = null!;  // one-to-zero-or-one
+        public virtual ContactInfo? ContactInfo { get; set; }  // one-to-zero-or-one
 
         public ICollection<Project> Projects { get; set; } = null!;  // transparent many-to-many
     }

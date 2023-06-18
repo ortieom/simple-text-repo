@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace ConsoleApp.Models {
+﻿namespace ConsoleApp.Models {
     public class ContactInfo {
         public ulong Id { get; set; }
         public virtual User User { get; set; } = null!;
