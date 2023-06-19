@@ -55,7 +55,7 @@ namespace DataLib {
             // constraints
             modelBuilder.Entity<User>()
                 .HasAlternateKey(u => new { u.Name, u.Email });  // unique
-                                                                 // length
+            // length
             modelBuilder.Entity<User>()
                 .Property(b => b.Name).HasMaxLength(50);
             modelBuilder.Entity<Project>()
