@@ -68,5 +68,31 @@ namespace DataLib {
                     where doc.Project.Id == project.Id
                     select doc).ToList();
         }
+
+        public void AddUser(User user) {
+            db.Users.Add(user);
+            db.SaveChanges();
+        }
+
+
+        public void AddContact(ContactInfo contact) {
+            db.Contacts.Add(contact);
+            db.SaveChanges();
+        }
+
+        public void AddProject(Project project) {
+            db.Projects.Add(project);
+            db.SaveChanges();
+        }
+
+        public void AddDocument(Document document) {
+            db.Documents.Add(document);
+            db.SaveChanges();
+        }
+
+        public void Update<TEntity>(TEntity entity) {
+            db.Update(entity!);
+            db.SaveChanges();
+        }
     }
 }
