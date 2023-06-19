@@ -1,4 +1,4 @@
-﻿using ConsoleApp.Models;
+﻿using DataLib.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataLib {

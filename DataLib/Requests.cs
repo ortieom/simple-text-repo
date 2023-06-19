@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ConsoleApp.Models;
+using DataLib.Models;
 
 namespace DataLib {
     public class Requests {

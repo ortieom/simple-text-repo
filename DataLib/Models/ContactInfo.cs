@@ -1,4 +1,4 @@
-﻿namespace ConsoleApp.Models {
+﻿namespace DataLib.Models {
     public class ContactInfo {
         public ulong Id { get; set; }
         public virtual User User { get; set; } = null!;

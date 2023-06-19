@@ -1,4 +1,4 @@
-﻿namespace ConsoleApp.Models {
+﻿namespace DataLib.Models {
     public class User {
         public ulong Id { get; set; }
 
