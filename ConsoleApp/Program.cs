@@ -1,27 +1,24 @@
-﻿using DataLib;
-using ConsoleApp.Models;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using MainApp;
+using Microsoft.EntityFrameworkCore;
 
-namespace ConsoleApp {
-    class Program {
-        static void Main(string[] args) {
-            using (Context db = new("storage.db")) {
-                // temporary code
-                User userTest = new() { Name = "User5", Email = "1mail@example.com", HashedPassword = "dfhjsklfhasduifu32e2d223213df13==" };
-                db.Users.Add(userTest);
-                db.SaveChanges();
-                ContactInfo contactInfo = new() { User = userTest, Type = "tg", Value = "ortieom3" };
-                db.Contacts.Add(contactInfo);
-                db.SaveChanges();
+using IHost host = Host.CreateDefaultBuilder(args)
+    .ConfigureServices(services => {
+        services.AddSingleton<DbContext, DataLib.Context>(
+            x => new DataLib.Context("storage.db"));
+        services.AddTransient<Logic>();
+    })
+    .Build();
 
-                var users = db.Users;
-                Console.WriteLine("Users:");
-                foreach (User u in users) {
-                    Console.WriteLine("{0}. {1} - {2}", u.Id, u.Name, u.Email);
-                    if (u.ContactInfo != null) {
-                        Console.WriteLine("contact {0}: {1}", u.ContactInfo.Type, u.ContactInfo.Value);
-                    }
-                }
-            }
-        }
-    }
+runTest(host.Services);
+
+host.Run();
+
+static void runTest(IServiceProvider hostProvider) {
+    using IServiceScope serviceScope = hostProvider.CreateScope();
+    IServiceProvider provider = serviceScope.ServiceProvider;
+    Logic logic = provider.GetRequiredService<Logic>();
+
+    logic.TestRun();
 }
