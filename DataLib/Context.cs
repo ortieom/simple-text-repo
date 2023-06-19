@@ -1,4 +1,4 @@
-﻿using ConsoleApp.Models;
+﻿using DataLib.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataLib {
@@ -9,6 +9,10 @@ namespace DataLib {
         public DbSet<ContactInfo> Contacts { get; set; } = null!;
 
         public string DbPath { get; }
+
+        public Context() {
+            DbPath = "storage.db";
+        }
 
         public Context(String DataSource) {
             DbPath = DataSource;
@@ -59,7 +63,7 @@ namespace DataLib {
             modelBuilder.Entity<Project>()
                 .Property(b => b.Description).HasMaxLength(200);
             modelBuilder.Entity<Document>()
-                .Property(b => b.Name).HasMaxLength(50);
+                .Property(b => b.Title).HasMaxLength(50);
             modelBuilder.Entity<Document>()
                 .Property(b => b.Description).HasMaxLength(200);
             modelBuilder.Entity<ContactInfo>()
