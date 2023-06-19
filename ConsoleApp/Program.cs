@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services => {
         services.AddSingleton<DbContext, DataLib.Context>(
-            x => new DataLib.Context("storage.db"));
+            x => new DataLib.Context("D:\\Projects\\dotnet-test\\ConsoleApp\\ConsoleApp\\storage.db"));
         services.AddTransient<Logic>();
     })
     .Build();
