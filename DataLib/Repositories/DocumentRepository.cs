@@ -5,11 +5,18 @@ namespace DataLib.Repositories {
     public class DocumentRepository : Repository<Document>, IDocumentRepository {
         public DocumentRepository(DbContext context) : base(context) { }
 
-        public ICollection<Document> GetDocumentsInProject(Project project, int pageIndex, int pageSize = 50) {
+        /// <summary>
+        /// Get documents connected with selected project (quried by pages)
+        /// </summary>
+        /// <param name="project"></param>
+        /// <param name="pageNo">Number of requested page (strat with 1)</param>
+        /// <param name="pageSize">Count of objects on one page</param>
+        /// <returns>Project documents in selected page</returns>
+        public ICollection<Document> GetDocumentsInProject(Project project, int pageNo, int pageSize = 50) {
             return (from doc in db.Documents.Include(p => p.Project)
                     where doc.Project.Id == project.Id
                     select doc).OrderBy(c => c.Id)
-                   .Skip((pageIndex - 1) * pageSize)
+                   .Skip((pageNo - 1) * pageSize)
                    .Take(pageSize)
                    .ToList();
         }

@@ -10,6 +10,10 @@ namespace DataLib {
 
         public string DbPath { get; }
 
+        /// <summary>
+        /// Default constructor
+        /// TODO: load dataSource from config!
+        /// </summary>
         public Context() {
             DbPath = "storage.db";
         }
@@ -20,9 +24,17 @@ namespace DataLib {
             Database.EnsureCreated();
         }
 
+        /// <summary>
+        /// Configure context with chosen data provider
+        /// </summary>
+        /// <param name="optionsBuilder"></param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.UseSqlite($"Data Source={DbPath}");
 
+        /// <summary>
+        /// Fluent API configurations
+        /// </summary>
+        /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             // primary keys
             modelBuilder.Entity<User>().HasKey(t => t.Id);
