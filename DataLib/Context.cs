@@ -10,6 +10,10 @@ namespace DataLib {
 
         public string DbPath { get; }
 
+        /// <summary>
+        /// Default constructor
+        /// TODO: load dataSource from config!
+        /// </summary>
         public Context() {
             DbPath = "storage.db";
         }
@@ -20,9 +24,17 @@ namespace DataLib {
             Database.EnsureCreated();
         }
 
+        /// <summary>
+        /// Configure context with chosen data provider
+        /// </summary>
+        /// <param name="optionsBuilder"></param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.UseSqlite($"Data Source={DbPath}");
 
+        /// <summary>
+        /// Fluent API configurations
+        /// </summary>
+        /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             // primary keys
             modelBuilder.Entity<User>().HasKey(t => t.Id);
@@ -32,18 +44,17 @@ namespace DataLib {
 
             // one to zero or one 
             modelBuilder.Entity<ContactInfo>()
-                .Property(u => u.Id);
-            modelBuilder.Entity<User>()
-                .HasOne(ci => ci.ContactInfo)
-                .WithOne(u => u.User)
+                .HasOne(u => u.User)
+                .WithOne(ci => ci.ContactInfo)
                 .HasForeignKey<ContactInfo>(u => u.Id)
+                .IsRequired(false)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // one to many
             modelBuilder.Entity<Project>()
                 .HasMany(p => p.Documents)
                 .WithOne(p => p.Project)
-                .HasForeignKey(b => b.Id)
+                .HasForeignKey(b => b.ProjectId)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.Cascade);
 
@@ -54,8 +65,8 @@ namespace DataLib {
 
             // constraints
             modelBuilder.Entity<User>()
-                .HasAlternateKey(u => new { u.Name, u.Email });  // unique
-                                                                 // length
+                .HasAlternateKey(u => new { u.Email });  // unique
+            // length
             modelBuilder.Entity<User>()
                 .Property(b => b.Name).HasMaxLength(50);
             modelBuilder.Entity<Project>()
