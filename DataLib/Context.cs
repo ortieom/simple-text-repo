@@ -32,18 +32,17 @@ namespace DataLib {
 
             // one to zero or one 
             modelBuilder.Entity<ContactInfo>()
-                .Property(u => u.Id);
-            modelBuilder.Entity<User>()
-                .HasOne(ci => ci.ContactInfo)
-                .WithOne(u => u.User)
+                .HasOne(u => u.User)
+                .WithOne(ci => ci.ContactInfo)
                 .HasForeignKey<ContactInfo>(u => u.Id)
+                .IsRequired(false)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // one to many
             modelBuilder.Entity<Project>()
                 .HasMany(p => p.Documents)
                 .WithOne(p => p.Project)
-                .HasForeignKey(b => b.Id)
+                .HasForeignKey(b => b.ProjectId)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.Cascade);
 
@@ -54,7 +53,7 @@ namespace DataLib {
 
             // constraints
             modelBuilder.Entity<User>()
-                .HasAlternateKey(u => new { u.Name, u.Email });  // unique
+                .HasAlternateKey(u => new { u.Email });  // unique
             // length
             modelBuilder.Entity<User>()
                 .Property(b => b.Name).HasMaxLength(50);

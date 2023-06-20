@@ -1,32 +1,52 @@
 ﻿using DataLib.Models;
-using DataLib;
-using Microsoft.EntityFrameworkCore;
+using Services;
 
 namespace MainApp {
     internal class Logic {
-        private Context db;
+        private readonly UserService userService;
+        private readonly ProjectService projectService;
+        private readonly DocumentService docService;
 
-        public Logic(DbContext dbContext) {
-            db = (Context) dbContext;
+        public Logic(UserService us, ProjectService ps, DocumentService ds) {
+            userService = us;
+            projectService = ps;
+            docService = ds;
         }
 
         public void TestRun() {
             // temporary code
-            User userTest = new() { Name = "User0", Email = "1mail@example.com", HashedPassword = "dfhjsklfhasduifu32e2d223213df13==" };
-            db.Users.Add(userTest);
-            db.SaveChanges();
-            ContactInfo contactInfo = new() { User = userTest, Type = "tg", Value = "ortieom3" };
-            db.Contacts.Add(contactInfo);
-            db.SaveChanges();
+            User user1 = userService.CreateUser("Artyom", "m@ex.com", "admin");
+            User user2 = userService.CreateUser("Test", "m2@ex.com", "admin");
 
-            var users = db.Users;
-            Console.WriteLine("Users:");
-            foreach (User u in users) {
-                Console.WriteLine("{0}. {1} - {2}", u.Id, u.Name, u.Email);
-                if (u.ContactInfo != null) {
-                    Console.WriteLine("contact {0}: {1}", u.ContactInfo.Type, u.ContactInfo.Value);
+            userService.AddContactInfo(user1, "tg", "tt");
+            userService.EditContact(user1, type: "vk");
+
+            userService.Edit(user2, name: "edit test");
+
+            User? aUser = userService.GetUser("m4@ex.com", "admin");
+
+            Project project = projectService.CreateProject(aUser, description: "test desc");
+
+            projectService.AddUserToProject(user2, project);
+
+            projectService.Edit(projectService.CreateProject(aUser, name: "name"), description: "hey!");
+
+            foreach (Project p in projectService.GetUserProjectsPaginated(aUser, 0, 10000)) {
+                Console.WriteLine("Project #{0} {1} ({2}) contains users", p.Id, p.Name, p.Description);
+                foreach (User u in userService.GetUsersInProjectPaginates(p, 0, 10000)) {
+                    Console.WriteLine("{0}. {1} {2} {3} (contact {4}: {5})", u.Id, u.Name, u.Surname ?? "", u.Email, 
+                        u.ContactInfo?.Type ?? "", u.ContactInfo?.Value ?? "");
                 }
             }
+
+            docService.CreateDocument(project, text: "новый документ");
+            docService.Delete(docService.CreateDocument(project, text: "2новый документ"));
+            docService.Edit(docService.CreateDocument(project, text: "3новый документ"), text: "Обновлённый текст");
+
+            projectService.Delete(project);
+
+            userService.Delete(user1);
+            userService.Delete(user2);
         }
     }
 }

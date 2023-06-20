@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataLib.Repositories {
     public class DocumentRepository : Repository<Document>, IDocumentRepository {
-        public DocumentRepository(Context context) : base(context) { }
+        public DocumentRepository(DbContext context) : base(context) { }
 
         public ICollection<Document> GetDocumentsInProject(Project project, int pageIndex, int pageSize = 50) {
             return (from doc in db.Documents.Include(p => p.Project)

@@ -5,6 +5,7 @@ namespace DataLib {
         IUserRepository Users { get; }
         IProjectRepository Projects { get; }
         IDocumentRepository Documents { get; }
+        public void Delete<TEntity>(TEntity entity);
 
         int Commit();
     }

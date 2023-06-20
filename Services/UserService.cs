@@ -10,14 +10,6 @@ namespace Services {
             _repos = unitOfWork;
         }
 
-        public Boolean HasAccesToProject(User user, Project project) {
-            return project.Users.Contains(user);
-        }
-
-        public Boolean HasAccesToDocument(User user, Document document) {
-            return HasAccesToProject(user, document.Project);
-        }
-
         public String HashPassword(String password) {
             return BC.HashPassword(password);
         }
@@ -26,11 +18,17 @@ namespace Services {
             return BC.Verify(password, user.HashedPassword); ;
         }
 
+        public User? Get(int id) {
+            return _repos.Users.Get(id);
+        }
+
         public User CreateUser(String name, String email, String password, String? surname = null) {
             String hashedPassword = HashPassword(password);
             User user = new() { Name = name, Surname = surname, Email = email, HashedPassword = hashedPassword };
 
             _repos.Users.Add(user);
+
+            _repos.Commit();
 
             return user;
         }
@@ -40,8 +38,53 @@ namespace Services {
 
             user.ContactInfo = contact;
 
+            _repos.Commit();
+
             return contact;
         }
 
+        public User? GetUser(String email, String password) {
+            User? user = _repos.Users.GetUserInfoByEmail(email)?.User;
+            if (user == null || !ValidatePassword(user, password)) { 
+                return null;
+            }
+            return user;
+        }
+
+        public ICollection<User> GetUsersInProjectPaginates(Project project, int pageIndex, int pageSize) {
+            return _repos.Users.GetUsersInProject(project, pageIndex, pageSize);
+        }
+
+        public User Edit(User user, String? name = null, String? surname = null, String? email = null, String? password = null) {
+            user.Name = name ?? user.Name;
+            user.Surname = surname ?? user.Surname;
+            user.Email = email ?? user.Email;
+            if (password != null) {
+                user.HashedPassword = HashPassword(password);
+            }
+            _repos.Commit();
+            return user;
+        }
+
+        public void Delete(User user) {
+            _repos.Delete(user);
+        }
+
+        public ContactInfo EditContact(User user, String? type = null, String? value = null) {
+            if (user.ContactInfo != null) {
+                user.ContactInfo.Type = type ?? user.ContactInfo.Type;
+                user.ContactInfo.Value = value ?? user.ContactInfo.Value;
+            } else {
+                ContactInfo contactInfo = new() { Type = type ?? "", Value = value ?? "", User = user };
+                user.ContactInfo = contactInfo;
+            }
+            
+            _repos.Commit();
+            return user.ContactInfo;
+        }
+
+        public void DeleteContact(User user) {
+            _repos.Delete(user.ContactInfo);
+        }
     }
 }

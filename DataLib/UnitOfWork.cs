@@ -1,10 +1,8 @@
 ﻿using DataLib.Repositories;
 using Microsoft.EntityFrameworkCore;
-using System.Data.Common;
-using System.Reflection.Metadata;
 
 namespace DataLib {
-    internal class UnitOfWork : IUnitOfWork {
+    public class UnitOfWork : IUnitOfWork {
         private readonly Context _db;
 
         public UnitOfWork(DbContext context) {
@@ -17,6 +15,11 @@ namespace DataLib {
         public IUserRepository Users { get; private set; }
         public IProjectRepository Projects { get; private set; }
         public IDocumentRepository Documents { get; private set; }
+
+        public void Delete<TEntity>(TEntity entity) {
+            _db.Remove(entity!);
+            _db.SaveChanges();
+        }
 
         public int Commit() {
             return _db.SaveChanges();
