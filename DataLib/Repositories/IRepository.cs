@@ -17,7 +17,7 @@ namespace DataLib.Repositories {
         /// Get all entities that satisfy predicate expression
         /// </summary>
         /// <param name="predicate">lambda expression</param>
-        /// <returns>All satisfying entites</returns>
+        /// <returns>All satisfying entities</returns>
         IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
 
         /// <summary>

@@ -4,14 +4,14 @@ using Microsoft.Extensions.Logging;
 
 namespace DataLib {
     public class Context : DbContext {
-        private ILogger _logger;
+        private readonly ILogger? _logger;
 
         public DbSet<User> Users { get; set; } = null!;
         public DbSet<Project> Projects { get; set; } = null!;
         public DbSet<Document> Documents { get; set; } = null!;
         public DbSet<ContactInfo> Contacts { get; set; } = null!;
 
-        public string DbPath { get; }
+        private string DbPath { get; }
 
         /// <summary>
         /// Default constructor

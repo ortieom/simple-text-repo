@@ -18,7 +18,7 @@ namespace Services {
         /// <param name="user"></param>
         /// <param name="project"></param>
         /// <returns>true if user has access</returns>
-        public Boolean HasAccesToProject(User user, Project project) {
+        public Boolean HasAccessToProject(User user, Project project) {
             return project.Users.Contains(user);
         }
 
@@ -58,10 +58,10 @@ namespace Services {
         }
 
         /// <summary>
-        /// Get projects connected with selected user (quried by pages)
+        /// Get projects connected with selected user (queried by pages)
         /// </summary>
         /// <param name="user"></param>
-        /// <param name="pageNo">Number of requested page (strat with 1)</param>
+        /// <param name="pageNo">Number of requested page (start with 1)</param>
         /// <param name="pageSize">Count of objects on one page</param>
         /// <returns>User's projects on selected page</returns>
         public ICollection<Project> GetUserProjectsPaginated(User user, int pageNo, int pageSize) {

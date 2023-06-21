@@ -18,7 +18,7 @@ namespace Services {
         /// </summary>
         /// <param name="password"></param>
         /// <returns>Hashed password</returns>
-        public String HashPassword(String password) {
+        public string HashPassword(String password) {
             return BC.HashPassword(password);
         }
 
@@ -93,10 +93,10 @@ namespace Services {
         }
 
         /// <summary>
-        /// Get users connected with selected project (quried by pages)
+        /// Get users connected with selected project (queried by pages)
         /// </summary>
         /// <param name="project"></param>
-        /// <param name="pageNo">Number of requested page (strat with 1)</param>
+        /// <param name="pageNo">Number of requested page (start with 1)</param>
         /// <param name="pageSize">Count of objects on one page</param>
         /// <returns>Users in project on selected page</returns>
         public ICollection<User> GetUsersInProjectPaginated(Project project, int pageNo, int pageSize) {

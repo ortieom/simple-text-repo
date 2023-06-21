@@ -18,7 +18,7 @@ namespace Services {
         /// <param name="user"></param>
         /// <param name="document"></param>
         /// <returns>true if user has access</returns>
-        public Boolean HasAccesToDocument(User user, Document document) {
+        public Boolean HasAccessToDocument(User user, Document document) {
             return document.Project.Users.Contains(user);
         }
 

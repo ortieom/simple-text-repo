@@ -39,7 +39,7 @@ namespace DataLib.Repositories {
         /// Get all entities that satisfy predicate expression
         /// </summary>
         /// <param name="predicate">lambda expression</param>
-        /// <returns>All satisfying entites</returns>
+        /// <returns>All satisfying entities</returns>
         public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate) {
             logger.LogDebug("Requested by predicate from {0}", _entities.GetType());
             return _entities.Where(predicate);
@@ -51,7 +51,7 @@ namespace DataLib.Repositories {
         /// </summary>
         /// <exception cref="InvalidOperationException"></exception>
         /// <param name="predicate"></param>
-        /// <returns>Entity that satisfies predicate or defaul value if nothing found</returns>
+        /// <returns>Entity that satisfies predicate or default value if nothing found</returns>
         public TEntity? SingleOrDefault(Expression<Func<TEntity, bool>> predicate) {
             logger.LogDebug("Requested single of default by predicate from {0}", _entities.GetType());
             return _entities.SingleOrDefault(predicate);
