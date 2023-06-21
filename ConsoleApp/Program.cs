@@ -5,11 +5,20 @@ using Microsoft.EntityFrameworkCore;
 using DataLib.Repositories;
 using DataLib;
 using Services;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using NLog;
+using NLog.Extensions.Logging;
+
+var config = new ConfigurationBuilder()
+    .AddJsonFile("D:\\Projects\\dotnet-test\\ConsoleApp\\ConsoleApp\\appsettings.json", optional: false, reloadOnChange: true)
+    .Build();
+
+LogManager.Configuration = new NLogLoggingConfiguration(config.GetSection("NLog"));
 
 using IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services => {
-        services.AddSingleton<DbContext, DataLib.Context>(
-            x => new DataLib.Context("D:\\Projects\\dotnet-test\\ConsoleApp\\ConsoleApp\\storage.db"));
+        services.AddSingleton<DbContext, DataLib.Context>();
         services.AddSingleton<IUserRepository, UserRepository>();
         services.AddSingleton<IProjectRepository, ProjectRepository>();
         services.AddSingleton<IDocumentRepository, DocumentRepository>();
@@ -18,6 +27,10 @@ using IHost host = Host.CreateDefaultBuilder(args)
         services.AddTransient<ProjectService>();
         services.AddTransient<DocumentService>();
         services.AddTransient<Logic>();
+    })
+    .ConfigureLogging(x => {
+        x.ClearProviders();
+        x.AddNLog();
     })
     .Build();
 
@@ -31,4 +44,6 @@ static void runTest(IServiceProvider hostProvider) {
     Logic logic = provider.GetRequiredService<Logic>();
 
     logic.TestRun();
+
+    LogManager.Shutdown();
 }

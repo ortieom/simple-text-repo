@@ -1,9 +1,10 @@
 ﻿using DataLib.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace DataLib.Repositories {
     public class DocumentRepository : Repository<Document>, IDocumentRepository {
-        public DocumentRepository(DbContext context) : base(context) { }
+        public DocumentRepository(DbContext context, ILogger<DocumentRepository> someLogger) : base(context, someLogger) { }
 
         /// <summary>
         /// Get documents connected with selected project (quried by pages)
@@ -13,6 +14,8 @@ namespace DataLib.Repositories {
         /// <param name="pageSize">Count of objects on one page</param>
         /// <returns>Project documents in selected page</returns>
         public ICollection<Document> GetDocumentsInProject(Project project, int pageNo, int pageSize = 50) {
+            logger.LogDebug("Requested documents from project {0} page {1}", project.Id, pageNo);
+
             return (from doc in db.Documents.Include(p => p.Project)
                     where doc.Project.Id == project.Id
                     select doc).OrderBy(c => c.Id)
