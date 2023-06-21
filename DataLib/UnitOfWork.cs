@@ -1,15 +1,19 @@
 ﻿using DataLib.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace DataLib {
     public class UnitOfWork : IUnitOfWork {
         private readonly Context _db;
+        private readonly ILogger _logger;
 
-        public UnitOfWork(DbContext context) {
+        public UnitOfWork(DbContext context, ILogger<UnitOfWork> logger, 
+            IUserRepository userRepository, IProjectRepository projectRepository, IDocumentRepository documentRepository) {
             _db = (Context) context;
-            Users = new UserRepository(_db);
-            Projects = new ProjectRepository(_db);
-            Documents = new DocumentRepository(_db);
+            _logger = logger;
+            Users = userRepository;
+            Projects = projectRepository;
+            Documents = documentRepository;
         }
 
         public IUserRepository Users { get; private set; }
@@ -31,6 +35,7 @@ namespace DataLib {
         /// </summary>
         /// <returns></returns>
         public int Commit() {
+            _logger.LogDebug("Committed pending changes");
             return _db.SaveChanges();
         }
 

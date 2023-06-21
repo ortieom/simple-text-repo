@@ -1,12 +1,15 @@
 ﻿using DataLib;
 using DataLib.Models;
+using Microsoft.Extensions.Logging;
 
 namespace Services {
     public class DocumentService {
         private readonly IUnitOfWork _repos;
+        private readonly ILogger _logger;
 
-        public DocumentService(IUnitOfWork unitOfWork) {
+        public DocumentService(IUnitOfWork unitOfWork, ILogger<DocumentService> logger) {
             _repos = unitOfWork;
+            _logger = logger;
         }
 
         /// <summary>

@@ -1,8 +1,11 @@
 ﻿using DataLib.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace DataLib {
     public class Context : DbContext {
+        private ILogger _logger;
+
         public DbSet<User> Users { get; set; } = null!;
         public DbSet<Project> Projects { get; set; } = null!;
         public DbSet<Document> Documents { get; set; } = null!;
@@ -18,18 +21,19 @@ namespace DataLib {
             DbPath = "storage.db";
         }
 
-        public Context(String DataSource) {
-            DbPath = DataSource;
-
-            Database.EnsureCreated();
+        public Context(ILogger<Context> logger) {
+            _logger = logger;
+            DbPath = "D:\\Projects\\dotnet-test\\ConsoleApp\\ConsoleApp\\storage.db";
         }
 
         /// <summary>
         /// Configure context with chosen data provider
         /// </summary>
         /// <param name="optionsBuilder"></param>
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.UseSqlite($"Data Source={DbPath}");
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
+            optionsBuilder.UseSqlite($"Data Source={DbPath}");
+            _logger?.LogInformation("Using database at {0}", DbPath);
+        }
 
         /// <summary>
         /// Fluent API configurations
@@ -88,9 +92,9 @@ namespace DataLib {
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Email);
 
-
-
             base.OnModelCreating(modelBuilder);
+
+            _logger?.LogDebug("Db configured");
         }
     }
 }

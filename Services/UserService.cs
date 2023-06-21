@@ -1,13 +1,16 @@
 ﻿using DataLib;
 using DataLib.Models;
 using BC = BCrypt.Net.BCrypt;
+using Microsoft.Extensions.Logging;
 
 namespace Services {
     public class UserService {
         private readonly IUnitOfWork _repos;
+        private readonly ILogger _logger;
 
-        public UserService(IUnitOfWork unitOfWork) {
+        public UserService(IUnitOfWork unitOfWork, ILogger<UserService> logger) {
             _repos = unitOfWork;
+            _logger = logger;
         }
 
         /// <summary>
