@@ -1,7 +1,7 @@
-﻿using DataLib.Models;
-using Services;
+﻿using TextRepo.DataAccessLayer.Models;
+using TextRepo.Services;
 
-namespace MainApp
+namespace TextRepo.MainApp
 {
     internal class Logic
     {

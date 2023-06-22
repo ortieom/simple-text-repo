@@ -1,14 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using MainApp;
-using Microsoft.EntityFrameworkCore;
-using DataLib.Repositories;
-using DataLib;
-using Services;
 using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using NLog;
+using Microsoft.Extensions.Hosting;
+using TextRepo.DataAccessLayer.Repositories;
+using TextRepo.DataAccessLayer;
+using TextRepo.Services;
+using TextRepo.MainApp;
 using NLog.Extensions.Logging;
+using NLog;
 
 var config = new ConfigurationBuilder()
     .AddJsonFile("D:\\Projects\\dotnet-test\\ConsoleApp\\ConsoleApp\\appsettings.json", optional: false,
@@ -19,7 +19,7 @@ LogManager.Configuration = new NLogLoggingConfiguration(config.GetSection("NLog"
 using IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
-        services.AddScoped<DbContext, DataLib.Context>();
+        services.AddScoped<DbContext, TextRepo.DataAccessLayer.Context>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IProjectRepository, ProjectRepository>();
         services.AddScoped<IDocumentRepository, DocumentRepository>();
