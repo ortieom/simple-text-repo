@@ -1,7 +1,9 @@
 ﻿using DataLib.Models;
 
-namespace DataLib.Repositories {
-    public interface IUserRepository : IRepository<User> {
+namespace DataLib.Repositories
+{
+    public interface IUserRepository : IRepository<User>
+    {
         /// <summary>
         /// Get User and ContactInfo united by user id
         /// </summary>

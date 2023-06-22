@@ -2,8 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace DataLib {
-    public class Context : DbContext {
+namespace DataLib
+{
+    public class Context : DbContext
+    {
         private readonly ILogger? _logger;
 
         public DbSet<User> Users { get; set; } = null!;
@@ -17,11 +19,13 @@ namespace DataLib {
         /// Default constructor
         /// TODO: load dataSource from config!
         /// </summary>
-        public Context() {
+        public Context()
+        {
             DbPath = "storage.db";
         }
 
-        public Context(ILogger<Context> logger) {
+        public Context(ILogger<Context> logger)
+        {
             _logger = logger;
             DbPath = "D:\\Projects\\dotnet-test\\ConsoleApp\\ConsoleApp\\storage.db";
         }
@@ -30,7 +34,8 @@ namespace DataLib {
         /// Configure context with chosen data provider
         /// </summary>
         /// <param name="optionsBuilder"></param>
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
             optionsBuilder.UseSqlite($"Data Source={DbPath}");
             _logger?.LogInformation("Using database at {0}", DbPath);
         }
@@ -39,7 +44,8 @@ namespace DataLib {
         /// Fluent API configurations
         /// </summary>
         /// <param name="modelBuilder"></param>
-        protected override void OnModelCreating(ModelBuilder modelBuilder) {
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
             // primary keys
             modelBuilder.Entity<User>().HasKey(t => t.Id);
             modelBuilder.Entity<Project>().HasKey(t => t.Id);
@@ -69,7 +75,7 @@ namespace DataLib {
 
             // constraints
             modelBuilder.Entity<User>()
-                .HasAlternateKey(u => new { u.Email });  // unique
+                .HasAlternateKey(u => new { u.Email }); // unique
             // length
             modelBuilder.Entity<User>()
                 .Property(b => b.Name).HasMaxLength(50);

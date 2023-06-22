@@ -2,14 +2,18 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace DataLib {
-    public class UnitOfWork : IUnitOfWork {
+namespace DataLib
+{
+    public class UnitOfWork : IUnitOfWork
+    {
         private readonly Context _db;
         private readonly ILogger _logger;
 
-        public UnitOfWork(DbContext context, ILogger<UnitOfWork> logger, 
-            IUserRepository userRepository, IProjectRepository projectRepository, IDocumentRepository documentRepository) {
-            _db = (Context) context;
+        public UnitOfWork(DbContext context, ILogger<UnitOfWork> logger,
+            IUserRepository userRepository, IProjectRepository projectRepository,
+            IDocumentRepository documentRepository)
+        {
+            _db = (Context)context;
             _logger = logger;
             Users = userRepository;
             Projects = projectRepository;
@@ -25,7 +29,8 @@ namespace DataLib {
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="entity"></param>
-        public void Delete<TEntity>(TEntity entity) {
+        public void Delete<TEntity>(TEntity entity)
+        {
             _db.Remove(entity!);
             _db.SaveChanges();
         }
@@ -34,7 +39,8 @@ namespace DataLib {
         /// Commit pending changes
         /// </summary>
         /// <returns></returns>
-        public int Commit() {
+        public int Commit()
+        {
             _logger.LogDebug("Committed pending changes");
             return _db.SaveChanges();
         }
@@ -42,7 +48,8 @@ namespace DataLib {
         /// <summary>
         /// Release allocated resources for db context
         /// </summary>
-        public void Dispose() {
+        public void Dispose()
+        {
             _db.Dispose();
         }
     }

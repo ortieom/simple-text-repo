@@ -1,7 +1,9 @@
 ﻿using DataLib.Models;
 
-namespace DataLib.Repositories {
-    public interface IDocumentRepository : IRepository<Document> {
+namespace DataLib.Repositories
+{
+    public interface IDocumentRepository : IRepository<Document>
+    {
         /// <summary>
         /// Get documents connected with selected project (queried by pages)
         /// </summary>

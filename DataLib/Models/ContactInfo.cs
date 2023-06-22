@@ -1,5 +1,7 @@
-﻿namespace DataLib.Models {
-    public class ContactInfo {
+﻿namespace DataLib.Models
+{
+    public class ContactInfo
+    {
         public int Id { get; set; }
         public virtual User User { get; set; } = null!;
 

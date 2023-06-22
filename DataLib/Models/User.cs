@@ -1,5 +1,7 @@
-﻿namespace DataLib.Models {
-    public class User {
+﻿namespace DataLib.Models
+{
+    public class User
+    {
         public int Id { get; set; }
 
         public string Name { get; set; } = null!;
@@ -10,8 +12,8 @@
 
         public string HashedPassword { get; set; } = null!;
 
-        public virtual ContactInfo? ContactInfo { get; set; }  // one-to-zero-or-one
+        public virtual ContactInfo? ContactInfo { get; set; } // one-to-zero-or-one
 
-        public ICollection<Project> Projects { get; set; } = null!;  // transparent many-to-many
+        public ICollection<Project> Projects { get; set; } = null!; // transparent many-to-many
     }
 }

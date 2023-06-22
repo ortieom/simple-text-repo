@@ -1,18 +1,22 @@
 ﻿using System.Linq.Expressions;
 
-namespace DataLib.Repositories {
-    public interface IRepository<TEntity> where TEntity : class {
+namespace DataLib.Repositories
+{
+    public interface IRepository<TEntity> where TEntity : class
+    {
         /// <summary>
         /// Get entity by id
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Entity with corresponding id</returns>
         TEntity? Get(int id);
+
         /// <summary>
         /// Get all entities 
         /// </summary>
         /// <returns>All entities</returns>
         IEnumerable<TEntity> GetAll();
+
         /// <summary>
         /// Get all entities that satisfy predicate expression
         /// </summary>
@@ -25,6 +29,7 @@ namespace DataLib.Repositories {
         /// </summary>
         /// <param name="entity"></param>
         void Add(TEntity entity);
+
         /// <summary>
         /// Add all entities of provided range to storage
         /// </summary>
@@ -36,6 +41,7 @@ namespace DataLib.Repositories {
         /// </summary>
         /// <param name="entity"></param>
         void Remove(TEntity entity);
+
         /// <summary>
         /// Remove all entities of provided range from storage
         /// </summary>

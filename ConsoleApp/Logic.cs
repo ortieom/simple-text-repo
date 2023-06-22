@@ -1,13 +1,16 @@
 ﻿using DataLib.Models;
 using Services;
 
-namespace MainApp {
-    internal class Logic {
+namespace MainApp
+{
+    internal class Logic
+    {
         private readonly UserService userService;
         private readonly ProjectService projectService;
         private readonly DocumentService docService;
 
-        public Logic(UserService us, ProjectService ps, DocumentService ds) {
+        public Logic(UserService us, ProjectService ps, DocumentService ds)
+        {
             userService = us;
             projectService = ps;
             docService = ds;
@@ -16,7 +19,8 @@ namespace MainApp {
         /// <summary>
         /// Some temporary code example
         /// </summary>
-        public void TestRun() {
+        public void TestRun()
+        {
             // temporary code
             User user1 = userService.CreateUser("Artyom", "m@ex.com", "admin");
             User user2 = userService.CreateUser("Test", "m2@ex.com", "admin");
@@ -34,10 +38,12 @@ namespace MainApp {
 
             projectService.Edit(projectService.CreateProject(aUser, name: "name"), description: "hey!");
 
-            foreach (Project p in projectService.GetUserProjectsPaginated(aUser, 1, 10000)) {
+            foreach (Project p in projectService.GetUserProjectsPaginated(aUser, 1, 10000))
+            {
                 Console.WriteLine("Project #{0} {1} ({2}) contains users", p.Id, p.Name, p.Description);
-                foreach (User u in userService.GetUsersInProjectPaginated(p, 1, 10000)) {
-                    Console.WriteLine("{0}. {1} {2} {3} (contact {4}: {5})", u.Id, u.Name, u.Surname ?? "", u.Email, 
+                foreach (User u in userService.GetUsersInProjectPaginated(p, 1, 10000))
+                {
+                    Console.WriteLine("{0}. {1} {2} {3} (contact {4}: {5})", u.Id, u.Name, u.Surname ?? "", u.Email,
                         u.ContactInfo?.Type ?? "", u.ContactInfo?.Value ?? "");
                 }
             }

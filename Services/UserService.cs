@@ -3,12 +3,15 @@ using DataLib.Models;
 using BC = BCrypt.Net.BCrypt;
 using Microsoft.Extensions.Logging;
 
-namespace Services {
-    public class UserService {
+namespace Services
+{
+    public class UserService
+    {
         private readonly IUnitOfWork _repos;
         private readonly ILogger _logger;
 
-        public UserService(IUnitOfWork unitOfWork, ILogger<UserService> logger) {
+        public UserService(IUnitOfWork unitOfWork, ILogger<UserService> logger)
+        {
             _repos = unitOfWork;
             _logger = logger;
         }
@@ -18,7 +21,8 @@ namespace Services {
         /// </summary>
         /// <param name="password"></param>
         /// <returns>Hashed password</returns>
-        public string HashPassword(String password) {
+        public string HashPassword(String password)
+        {
             return BC.HashPassword(password);
         }
 
@@ -28,8 +32,10 @@ namespace Services {
         /// <param name="user"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public Boolean ValidatePassword(User user, String password) {
-            return BC.Verify(password, user.HashedPassword); ;
+        public Boolean ValidatePassword(User user, String password)
+        {
+            return BC.Verify(password, user.HashedPassword);
+            ;
         }
 
         /// <summary>
@@ -37,19 +43,21 @@ namespace Services {
         /// </summary>
         /// <param name="id"></param>
         /// <returns>User with corresponding id</returns>
-        public User? Get(int id) {
+        public User? Get(int id)
+        {
             return _repos.Users.Get(id);
         }
 
-       /// <summary>
-       /// Create new user with necessary and optional parameters
-       /// </summary>
-       /// <param name="name">Necessary</param>
-       /// <param name="email">Necessary</param>
-       /// <param name="password"></param>
-       /// <param name="surname"></param>
-       /// <returns>New User object</returns>
-        public User CreateUser(String name, String email, String password, String? surname = null) {
+        /// <summary>
+        /// Create new user with necessary and optional parameters
+        /// </summary>
+        /// <param name="name">Necessary</param>
+        /// <param name="email">Necessary</param>
+        /// <param name="password"></param>
+        /// <param name="surname"></param>
+        /// <returns>New User object</returns>
+        public User CreateUser(String name, String email, String password, String? surname = null)
+        {
             String hashedPassword = HashPassword(password);
             User user = new() { Name = name, Surname = surname, Email = email, HashedPassword = hashedPassword };
 
@@ -67,7 +75,8 @@ namespace Services {
         /// <param name="type"></param>
         /// <param name="value"></param>
         /// <returns>New ContactInfo object</returns>
-        public ContactInfo AddContactInfo(User user, String type, String value) {
+        public ContactInfo AddContactInfo(User user, String type, String value)
+        {
             ContactInfo contact = new() { Type = type, Value = value, User = user };
 
             user.ContactInfo = contact;
@@ -84,11 +93,14 @@ namespace Services {
         /// <param name="email"></param>
         /// <param name="password"></param>
         /// <returns>Requested user</returns>
-        public User? GetUser(String email, String password) {
+        public User? GetUser(String email, String password)
+        {
             User? user = _repos.Users.GetUserInfoByEmail(email)?.User;
-            if (user == null || !ValidatePassword(user, password)) { 
+            if (user == null || !ValidatePassword(user, password))
+            {
                 return null;
             }
+
             return user;
         }
 
@@ -99,7 +111,8 @@ namespace Services {
         /// <param name="pageNo">Number of requested page (start with 1)</param>
         /// <param name="pageSize">Count of objects on one page</param>
         /// <returns>Users in project on selected page</returns>
-        public ICollection<User> GetUsersInProjectPaginated(Project project, int pageNo, int pageSize) {
+        public ICollection<User> GetUsersInProjectPaginated(Project project, int pageNo, int pageSize)
+        {
             return _repos.Users.GetUsersInProject(project, pageNo, pageSize);
         }
 
@@ -113,13 +126,17 @@ namespace Services {
         /// <param name="email"></param>
         /// <param name="password"></param>
         /// <returns>Updated User object</returns>
-        public User Edit(User user, String? name = null, String? surname = null, String? email = null, String? password = null) {
+        public User Edit(User user, String? name = null, String? surname = null, String? email = null,
+            String? password = null)
+        {
             user.Name = name ?? user.Name;
             user.Surname = surname ?? user.Surname;
             user.Email = email ?? user.Email;
-            if (password != null) {
+            if (password != null)
+            {
                 user.HashedPassword = HashPassword(password);
             }
+
             _repos.Commit();
             return user;
         }
@@ -128,7 +145,8 @@ namespace Services {
         /// Delete user from storage
         /// </summary>
         /// <param name="user"></param>
-        public void Delete(User user) {
+        public void Delete(User user)
+        {
             _repos.Delete(user);
         }
 
@@ -140,15 +158,19 @@ namespace Services {
         /// <param name="type"></param>
         /// <param name="value"></param>
         /// <returns>Updated ContactInfo object</returns>
-        public ContactInfo EditContact(User user, String? type = null, String? value = null) {
-            if (user.ContactInfo != null) {
+        public ContactInfo EditContact(User user, String? type = null, String? value = null)
+        {
+            if (user.ContactInfo != null)
+            {
                 user.ContactInfo.Type = type ?? user.ContactInfo.Type;
                 user.ContactInfo.Value = value ?? user.ContactInfo.Value;
-            } else {
+            }
+            else
+            {
                 ContactInfo contactInfo = new() { Type = type ?? "", Value = value ?? "", User = user };
                 user.ContactInfo = contactInfo;
             }
-            
+
             _repos.Commit();
             return user.ContactInfo;
         }
@@ -157,7 +179,8 @@ namespace Services {
         /// Delete contact info from storage
         /// </summary>
         /// <param name="user"></param>
-        public void DeleteContact(User user) {
+        public void DeleteContact(User user)
+        {
             _repos.Delete(user.ContactInfo);
         }
     }
