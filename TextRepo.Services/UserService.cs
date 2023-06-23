@@ -1,19 +1,16 @@
-﻿using TextRepo.DataAccessLayer;
-using TextRepo.DataAccessLayer.Models;
+﻿using TextRepo.DataAccessLayer.Models;
 using BC = BCrypt.Net.BCrypt;
-using Microsoft.Extensions.Logging;
+using TextRepo.DataAccessLayer.Repositories;
 
 namespace TextRepo.Services
 {
     public class UserService
     {
-        private readonly IUnitOfWork _repos;
-        private readonly ILogger _logger;
+        private readonly IUserRepository _repo;
 
-        public UserService(IUnitOfWork unitOfWork, ILogger<UserService> logger)
+        public UserService(IUserRepository repo)
         {
-            _repos = unitOfWork;
-            _logger = logger;
+            _repo = repo;
         }
 
         /// <summary>
@@ -21,7 +18,7 @@ namespace TextRepo.Services
         /// </summary>
         /// <param name="password"></param>
         /// <returns>Hashed password</returns>
-        public string HashPassword(String password)
+        private string HashPassword(string password)
         {
             return BC.HashPassword(password);
         }
@@ -32,7 +29,7 @@ namespace TextRepo.Services
         /// <param name="user"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public Boolean ValidatePassword(User user, String password)
+        private bool ValidatePassword(User user, string password)
         {
             return BC.Verify(password, user.HashedPassword);
             ;
@@ -45,7 +42,7 @@ namespace TextRepo.Services
         /// <returns>User with corresponding id</returns>
         public User? Get(int id)
         {
-            return _repos.Users.Get(id);
+            return _repo.Get(id);
         }
 
         /// <summary>
@@ -56,14 +53,14 @@ namespace TextRepo.Services
         /// <param name="password"></param>
         /// <param name="surname"></param>
         /// <returns>New User object</returns>
-        public User CreateUser(String name, String email, String password, String? surname = null)
+        public User CreateUser(string name, string email, string password, string? surname = null)
         {
-            String hashedPassword = HashPassword(password);
+            string hashedPassword = HashPassword(password);
             User user = new() { Name = name, Surname = surname, Email = email, HashedPassword = hashedPassword };
 
-            _repos.Users.Add(user);
+            _repo.Add(user);
 
-            _repos.Commit();
+            _repo.Commit();
 
             return user;
         }
@@ -75,13 +72,13 @@ namespace TextRepo.Services
         /// <param name="type"></param>
         /// <param name="value"></param>
         /// <returns>New ContactInfo object</returns>
-        public ContactInfo AddContactInfo(User user, String type, String value)
+        public ContactInfo AddContactInfo(User user, string type, string value)
         {
             ContactInfo contact = new() { Type = type, Value = value, User = user };
 
             user.ContactInfo = contact;
 
-            _repos.Commit();
+            _repo.Commit();
 
             return contact;
         }
@@ -93,9 +90,9 @@ namespace TextRepo.Services
         /// <param name="email"></param>
         /// <param name="password"></param>
         /// <returns>Requested user</returns>
-        public User? GetUser(String email, String password)
+        public User? GetUser(string email, string password)
         {
-            User? user = _repos.Users.GetUserInfoByEmail(email)?.User;
+            User? user = _repo.GetUserInfoByEmail(email)?.User;
             if (user == null || !ValidatePassword(user, password))
             {
                 return null;
@@ -113,7 +110,7 @@ namespace TextRepo.Services
         /// <returns>Users in project on selected page</returns>
         public ICollection<User> GetUsersInProjectPaginated(Project project, int pageNo, int pageSize)
         {
-            return _repos.Users.GetUsersInProject(project, pageNo, pageSize);
+            return _repo.GetUsersInProject(project, pageNo, pageSize);
         }
 
         /// <summary>
@@ -126,8 +123,8 @@ namespace TextRepo.Services
         /// <param name="email"></param>
         /// <param name="password"></param>
         /// <returns>Updated User object</returns>
-        public User Edit(User user, String? name = null, String? surname = null, String? email = null,
-            String? password = null)
+        public User Edit(User user, string? name = null, string? surname = null, string? email = null,
+            string? password = null)
         {
             user.Name = name ?? user.Name;
             user.Surname = surname ?? user.Surname;
@@ -137,7 +134,7 @@ namespace TextRepo.Services
                 user.HashedPassword = HashPassword(password);
             }
 
-            _repos.Commit();
+            _repo.Commit();
             return user;
         }
 
@@ -147,41 +144,9 @@ namespace TextRepo.Services
         /// <param name="user"></param>
         public void Delete(User user)
         {
-            _repos.Delete(user);
+            _repo.Remove(user);
         }
 
-        /// <summary>
-        /// Edit contact information with optional parameters.
-        /// Provide only arguments whose columns must be updated
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="type"></param>
-        /// <param name="value"></param>
-        /// <returns>Updated ContactInfo object</returns>
-        public ContactInfo EditContact(User user, String? type = null, String? value = null)
-        {
-            if (user.ContactInfo != null)
-            {
-                user.ContactInfo.Type = type ?? user.ContactInfo.Type;
-                user.ContactInfo.Value = value ?? user.ContactInfo.Value;
-            }
-            else
-            {
-                ContactInfo contactInfo = new() { Type = type ?? "", Value = value ?? "", User = user };
-                user.ContactInfo = contactInfo;
-            }
-
-            _repos.Commit();
-            return user.ContactInfo;
-        }
-
-        /// <summary>
-        /// Delete contact info from storage
-        /// </summary>
-        /// <param name="user"></param>
-        public void DeleteContact(User user)
-        {
-            _repos.Delete(user.ContactInfo);
-        }
+        
     }
 }

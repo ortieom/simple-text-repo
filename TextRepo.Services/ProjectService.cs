@@ -1,18 +1,17 @@
 ﻿using TextRepo.DataAccessLayer;
 using TextRepo.DataAccessLayer.Models;
 using Microsoft.Extensions.Logging;
+using TextRepo.DataAccessLayer.Repositories;
 
 namespace TextRepo.Services
 {
     public class ProjectService
     {
-        private readonly IUnitOfWork _repos;
-        private readonly ILogger _logger;
+        private readonly IProjectRepository _repo;
 
-        public ProjectService(IUnitOfWork unitOfWork, ILogger<ProjectService> logger)
+        public ProjectService(IProjectRepository repo)
         {
-            _repos = unitOfWork;
-            _logger = logger;
+            _repo = repo;
         }
 
         /// <summary>
@@ -21,7 +20,7 @@ namespace TextRepo.Services
         /// <param name="user"></param>
         /// <param name="project"></param>
         /// <returns>true if user has access</returns>
-        public Boolean HasAccessToProject(User user, Project project)
+        public bool HasAccessToProject(User user, Project project)
         {
             return project.Users.Contains(user);
         }
@@ -33,7 +32,7 @@ namespace TextRepo.Services
         /// <returns>Project with corresponding id</returns>
         public Project? Get(int id)
         {
-            return _repos.Projects.Get(id);
+            return _repo.Get(id);
         }
 
         /// <summary>
@@ -43,11 +42,11 @@ namespace TextRepo.Services
         /// <param name="name"></param>
         /// <param name="description"></param>
         /// <returns>New Project object</returns>
-        public Project CreateProject(User creator, String? name = null, String? description = null)
+        public Project CreateProject(User creator, string? name = null, string? description = null)
         {
             Project project = new() { Users = new List<User> { creator }, Name = name, Description = description };
-            _repos.Projects.Add(project);
-            _repos.Commit();
+            _repo.Add(project);
+            _repo.Commit();
             return project;
         }
 
@@ -60,7 +59,7 @@ namespace TextRepo.Services
         public Project AddUserToProject(User user, Project project)
         {
             project.Users.Add(user);
-            _repos.Commit();
+            _repo.Commit();
             return project;
         }
 
@@ -73,7 +72,7 @@ namespace TextRepo.Services
         /// <returns>User's projects on selected page</returns>
         public ICollection<Project> GetUserProjectsPaginated(User user, int pageNo, int pageSize)
         {
-            return _repos.Projects.GetUserProjects(user, pageNo, pageSize);
+            return _repo.GetUserProjects(user, pageNo, pageSize);
         }
 
         /// <summary>
@@ -84,12 +83,12 @@ namespace TextRepo.Services
         /// <param name="name"></param>
         /// <param name="description"></param>
         /// <returns>Updated Project</returns>
-        public Project Edit(Project project, String? name = null, String? description = null)
+        public Project Edit(Project project, string? name = null, string? description = null)
         {
             project.Name = name ?? project.Name;
             project.Description = description ?? project.Description;
 
-            _repos.Commit();
+            _repo.Commit();
             return project;
         }
 
@@ -99,7 +98,7 @@ namespace TextRepo.Services
         /// <param name="project"></param>
         public void Delete(Project project)
         {
-            _repos.Delete(project);
+            _repo.Remove(project);
         }
     }
 }

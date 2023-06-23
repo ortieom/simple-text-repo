@@ -47,5 +47,11 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// </summary>
         /// <param name="entities"></param>
         void RemoveRange(IEnumerable<TEntity> entities);
+        
+        /// <summary>
+        /// Commit pending changes
+        /// </summary>
+        /// <returns></returns>
+        int Commit();
     }
 }

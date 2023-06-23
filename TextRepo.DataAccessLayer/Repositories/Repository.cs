@@ -101,5 +101,14 @@ namespace TextRepo.DataAccessLayer.Repositories
             logger.LogDebug("Remove enties from {0}", _entities.GetType());
             _entities.RemoveRange(entities);
         }
+
+        /// <summary>
+        /// Commit pending changes
+        /// </summary>
+        /// <returns></returns>
+        public int Commit()
+        {
+            return db.SaveChanges();
+        }
     }
 }

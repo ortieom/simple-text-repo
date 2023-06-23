@@ -27,7 +27,7 @@ namespace TextRepo.DataAccessLayer
         public Context(ILogger<Context> logger)
         {
             _logger = logger;
-            DbPath = "D:\\Projects\\dotnet-test\\ConsoleApp\\ConsoleApp\\storage.db";
+            DbPath = "/home/artyom/projects/simple-text-repo/ConsoleApp/storage.db";
         }
 
         /// <summary>

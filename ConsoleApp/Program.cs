@@ -4,14 +4,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Hosting;
 using TextRepo.DataAccessLayer.Repositories;
-using TextRepo.DataAccessLayer;
 using TextRepo.Services;
 using TextRepo.MainApp;
 using NLog.Extensions.Logging;
 using NLog;
 
 var config = new ConfigurationBuilder()
-    .AddJsonFile("D:\\Projects\\dotnet-test\\ConsoleApp\\ConsoleApp\\appsettings.json", optional: false,
+    .AddJsonFile("/home/artyom/projects/simple-text-repo/ConsoleApp/appsettings.json", optional: false,
         reloadOnChange: true)
     .Build();
 LogManager.Configuration = new NLogLoggingConfiguration(config.GetSection("NLog"));
@@ -23,10 +22,11 @@ using IHost host = Host.CreateDefaultBuilder(args)
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IProjectRepository, ProjectRepository>();
         services.AddScoped<IDocumentRepository, DocumentRepository>();
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IContactRepository, ContactRepository>();
         services.AddTransient<UserService>();
         services.AddTransient<ProjectService>();
         services.AddTransient<DocumentService>();
+        services.AddTransient<ContactService>();
         services.AddTransient<Logic>();
     })
     .ConfigureLogging(x =>

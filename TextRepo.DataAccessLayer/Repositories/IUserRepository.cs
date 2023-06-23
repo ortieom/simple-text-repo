@@ -14,7 +14,7 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// <summary>
         /// Get User and ContactInfo united by user email
         /// </summary>
-        /// <param name="userId"></param>
+        /// <param name="email"></param>
         /// <returns>UserInfo object</returns>
         public UserInfo? GetUserInfoByEmail(string email);
 

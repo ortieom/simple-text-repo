@@ -1,18 +1,17 @@
 ﻿using TextRepo.DataAccessLayer;
 using TextRepo.DataAccessLayer.Models;
 using Microsoft.Extensions.Logging;
+using TextRepo.DataAccessLayer.Repositories;
 
 namespace TextRepo.Services
 {
     public class DocumentService
     {
-        private readonly IUnitOfWork _repos;
-        private readonly ILogger _logger;
+        private readonly IDocumentRepository _repo;
 
-        public DocumentService(IUnitOfWork unitOfWork, ILogger<DocumentService> logger)
+        public DocumentService(IDocumentRepository repo)
         {
-            _repos = unitOfWork;
-            _logger = logger;
+            _repo = repo;
         }
 
         /// <summary>
@@ -21,7 +20,7 @@ namespace TextRepo.Services
         /// <param name="user"></param>
         /// <param name="document"></param>
         /// <returns>true if user has access</returns>
-        public Boolean HasAccessToDocument(User user, Document document)
+        public bool HasAccessToDocument(User user, Document document)
         {
             return document.Project.Users.Contains(user);
         }
@@ -33,7 +32,7 @@ namespace TextRepo.Services
         /// <returns>Document with corresponding id</returns>
         public Document? Get(int id)
         {
-            return _repos.Documents.Get(id);
+            return _repo.Get(id);
         }
 
         /// <summary>
@@ -44,13 +43,13 @@ namespace TextRepo.Services
         /// <param name="description"></param>
         /// <param name="text">Contents of the new document</param>
         /// <returns>New Document object</returns>
-        public Document CreateDocument(Project project, String? title = null, String? description = null,
-            String? text = null)
+        public Document CreateDocument(Project project, string? title = null, string? description = null,
+            string? text = null)
         {
             Document doc = new() { Project = project, Title = title, Description = description, Contents = text };
-            _repos.Documents.Add(doc);
+            _repo.Add(doc);
             project.Documents.Add(doc);
-            _repos.Commit();
+            _repo.Commit();
             return doc;
         }
 
@@ -60,7 +59,7 @@ namespace TextRepo.Services
         /// <param name="document"></param>
         public void Delete(Document document)
         {
-            _repos.Delete(document);
+            _repo.Remove(document);
         }
 
         /// <summary>
@@ -72,12 +71,12 @@ namespace TextRepo.Services
         /// <param name="description"></param>
         /// <param name="text"></param>
         /// <returns>Updated Document</returns>
-        public Document Edit(Document doc, String? title = null, String? description = null, String? text = null)
+        public Document Edit(Document doc, string? title = null, string? description = null, string? text = null)
         {
             doc.Title = title ?? doc.Title;
             doc.Description = description ?? doc.Description;
             doc.Contents = text ?? doc.Contents;
-            _repos.Commit();
+            _repo.Commit();
             return doc;
         }
     }
