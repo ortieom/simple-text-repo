@@ -1,4 +1,4 @@
-﻿using TextRepo.DataAccessLayer.Models;
+﻿using TextRepo.Commons.Models;
 using TextRepo.Services;
 
 namespace TextRepo.MainApp

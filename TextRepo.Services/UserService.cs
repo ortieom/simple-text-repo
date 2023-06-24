@@ -1,4 +1,4 @@
-﻿using TextRepo.DataAccessLayer.Models;
+﻿using TextRepo.Commons.Models;
 using BC = BCrypt.Net.BCrypt;
 using TextRepo.DataAccessLayer.Repositories;
 

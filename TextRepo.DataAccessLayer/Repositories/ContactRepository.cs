@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using TextRepo.DataAccessLayer.Models;
+using TextRepo.Commons.Models;
 
 namespace TextRepo.DataAccessLayer.Repositories
 {

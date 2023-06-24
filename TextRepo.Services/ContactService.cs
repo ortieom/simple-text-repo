@@ -1,5 +1,5 @@
 using TextRepo.DataAccessLayer.Repositories;
-using TextRepo.DataAccessLayer.Models;
+using TextRepo.Commons.Models;
 
 namespace TextRepo.Services
 {

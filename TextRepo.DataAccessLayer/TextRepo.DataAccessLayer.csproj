@@ -10,5 +10,9 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.19" />
     <PackageReference Include="NLog" Version="5.2.0" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\TextRepo.Commons\TextRepo.Commons.csproj" />
+  </ItemGroup>
 
 </Project>

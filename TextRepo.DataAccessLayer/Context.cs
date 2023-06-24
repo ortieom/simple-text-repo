@@ -1,18 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using TextRepo.DataAccessLayer.Models;
-
+using TextRepo.Commons.Models;
 namespace TextRepo.DataAccessLayer
 {
     public class Context : DbContext
     {
         private readonly ILoggerFactory _loggerFactory;
 
-        public DbSet<User> Users { get; set; } = null!;
-        public DbSet<Project> Projects { get; set; } = null!;
-        public DbSet<Document> Documents { get; set; } = null!;
-        public DbSet<ContactInfo> Contacts { get; set; } = null!;
+        public DbSet<User> Users => Set<User>();
+        public DbSet<Project> Projects => Set<Project>();
+        public DbSet<Document> Documents => Set<Document>();
+        public DbSet<ContactInfo> Contacts => Set<ContactInfo>();
 
         private string DbPath { get; }
         private readonly bool _verbose;

@@ -1,4 +1,4 @@
-﻿namespace TextRepo.DataAccessLayer.Models
+﻿namespace TextRepo.Commons.Models
 {
     public class Document
     {

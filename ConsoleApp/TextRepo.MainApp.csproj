@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\TextRepo.DataAccessLayer\TextRepo.DataAccessLayer.csproj" />
     <ProjectReference Include="..\TextRepo.Services\TextRepo.Services.csproj" />
+    <ProjectReference Include="..\TextRepo.Commons\TextRepo.Commons.csproj" />
   </ItemGroup>
 
   <ItemGroup>

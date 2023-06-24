@@ -1,6 +1,4 @@
-﻿using TextRepo.DataAccessLayer;
-using TextRepo.DataAccessLayer.Models;
-using Microsoft.Extensions.Logging;
+﻿using TextRepo.Commons.Models;
 using TextRepo.DataAccessLayer.Repositories;
 
 namespace TextRepo.Services
