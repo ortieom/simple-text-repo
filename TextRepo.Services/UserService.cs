@@ -145,6 +145,7 @@ namespace TextRepo.Services
         public void Delete(User user)
         {
             _repo.Remove(user);
+            _repo.Commit();
         }
 
         

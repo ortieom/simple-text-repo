@@ -43,8 +43,11 @@ namespace TextRepo.Services
         /// <param name="user"></param>
         public void DeleteContact(User user)
         {
-            if (user.ContactInfo is not null) 
+            if (user.ContactInfo is not null)
+            {
                 _repo.Remove(user.ContactInfo);
+                _repo.Commit();
+            }
         }
     }
 }

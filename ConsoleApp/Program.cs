@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.Json;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Hosting;
 using TextRepo.DataAccessLayer.Repositories;
@@ -8,17 +9,21 @@ using TextRepo.Services;
 using TextRepo.MainApp;
 using NLog.Extensions.Logging;
 using NLog;
+using NLog.Config;
+using TextRepo.DataAccessLayer;
 
-var config = new ConfigurationBuilder()
-    .AddJsonFile("/home/artyom/projects/simple-text-repo/ConsoleApp/appsettings.json", optional: false,
-        reloadOnChange: true)
-    .Build();
-LogManager.Configuration = new NLogLoggingConfiguration(config.GetSection("NLog"));
+// LogManager.Configuration = new NLogLoggingConfiguration(config.GetSection("NLog"));
 
 using IHost host = Host.CreateDefaultBuilder(args)
-    .ConfigureServices(services =>
+    .ConfigureAppConfiguration(x =>
     {
-        services.AddScoped<DbContext, TextRepo.DataAccessLayer.Context>();
+        x.SetBasePath(Directory.GetCurrentDirectory());
+        x.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+    })
+    .ConfigureServices((context, services) =>
+    {
+        services.AddOptions<DbSettingsModel>().Bind(context.Configuration.GetSection("Database"));
+        services.AddScoped<DbContext, Context>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IProjectRepository, ProjectRepository>();
         services.AddScoped<IDocumentRepository, DocumentRepository>();
@@ -29,10 +34,11 @@ using IHost host = Host.CreateDefaultBuilder(args)
         services.AddTransient<ContactService>();
         services.AddTransient<Logic>();
     })
-    .ConfigureLogging(x =>
+    .ConfigureLogging((context, logBuilder) =>
     {
-        x.ClearProviders();
-        x.AddNLog();
+        LogManager.Configuration = new NLogLoggingConfiguration(context.Configuration.GetSection("NLog"));
+        logBuilder.ClearProviders();
+        logBuilder.AddNLog();
     })
     .Build();
 

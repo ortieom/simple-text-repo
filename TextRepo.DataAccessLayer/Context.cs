@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using TextRepo.DataAccessLayer.Models;
 
 namespace TextRepo.DataAccessLayer
 {
     public class Context : DbContext
     {
-        private readonly ILogger? _logger;
+        private readonly ILoggerFactory _loggerFactory;
 
         public DbSet<User> Users { get; set; } = null!;
         public DbSet<Project> Projects { get; set; } = null!;
@@ -14,20 +15,16 @@ namespace TextRepo.DataAccessLayer
         public DbSet<ContactInfo> Contacts { get; set; } = null!;
 
         private string DbPath { get; }
+        private readonly bool _verbose;
 
         /// <summary>
         /// Default constructor
-        /// TODO: load dataSource from config!
         /// </summary>
-        public Context()
+        public Context(ILoggerFactory loggerFactory, IOptions<DbSettingsModel> options)
         {
-            DbPath = "storage.db";
-        }
-
-        public Context(ILogger<Context> logger)
-        {
-            _logger = logger;
-            DbPath = "/home/artyom/projects/simple-text-repo/ConsoleApp/storage.db";
+            _loggerFactory = loggerFactory;
+            DbPath = options.Value.ConnectionString;
+            _verbose = options.Value.Verbose;
         }
 
         /// <summary>
@@ -37,7 +34,8 @@ namespace TextRepo.DataAccessLayer
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite($"Data Source={DbPath}");
-            _logger?.LogInformation("Using database at {0}", DbPath);
+            if (_verbose)
+                optionsBuilder.UseLoggerFactory(_loggerFactory);
         }
 
         /// <summary>
@@ -99,8 +97,6 @@ namespace TextRepo.DataAccessLayer
                 .HasIndex(u => u.Email);
 
             base.OnModelCreating(modelBuilder);
-
-            _logger?.LogDebug("Db configured");
         }
     }
 }

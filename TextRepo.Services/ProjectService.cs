@@ -99,6 +99,7 @@ namespace TextRepo.Services
         public void Delete(Project project)
         {
             _repo.Remove(project);
+            _repo.Commit();
         }
     }
 }

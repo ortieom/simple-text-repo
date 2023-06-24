@@ -60,6 +60,7 @@ namespace TextRepo.Services
         public void Delete(Document document)
         {
             _repo.Remove(document);
+            _repo.Commit();
         }
 
         /// <summary>

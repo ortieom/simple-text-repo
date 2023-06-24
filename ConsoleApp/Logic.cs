@@ -63,6 +63,8 @@ namespace TextRepo.MainApp
 
             _userService.Delete(user1);
             _userService.Delete(user2);
+            
+            Console.WriteLine("End");
         }
     }
 }
