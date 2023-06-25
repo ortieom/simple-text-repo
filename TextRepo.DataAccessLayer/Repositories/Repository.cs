@@ -1,19 +1,24 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
 
 namespace TextRepo.DataAccessLayer.Repositories
 {
+    /// <summary>
+    /// Represents basic data access layer for all models
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
         protected readonly Context db;
-        protected readonly ILogger logger;
         private readonly DbSet<TEntity> _entities;
 
-        public Repository(DbContext context, ILogger<Repository<TEntity>> someLogger)
+        /// <summary>
+        /// Creates base class with common methods for all repositories
+        /// </summary>
+        /// <param name="context"></param>
+        public Repository(DbContext context)
         {
             db = (Context)context;
-            logger = someLogger;
             _entities = db.Set<TEntity>();
         }
 
@@ -24,7 +29,6 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// <returns>Entity with corresponding id</returns>
         public TEntity? Get(int id)
         {
-            logger.LogDebug("Requested from {0} with id {1}", _entities.GetType(), id);
             return _entities.Find(id);
         }
 
@@ -34,7 +38,6 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// <returns>All entities</returns>
         public IEnumerable<TEntity> GetAll()
         {
-            logger.LogDebug("Requested all from {0}", _entities.GetType());
             return _entities.ToList();
         }
 
@@ -45,7 +48,6 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// <returns>All satisfying entities</returns>
         public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)
         {
-            logger.LogDebug("Requested by predicate from {0}", _entities.GetType());
             return _entities.Where(predicate);
         }
 
@@ -58,7 +60,6 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// <returns>Entity that satisfies predicate or default value if nothing found</returns>
         public TEntity? SingleOrDefault(Expression<Func<TEntity, bool>> predicate)
         {
-            logger.LogDebug("Requested single of default by predicate from {0}", _entities.GetType());
             return _entities.SingleOrDefault(predicate);
         }
 
@@ -68,7 +69,6 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// <param name="entity"></param>
         public void Add(TEntity entity)
         {
-            logger.LogDebug("Add entity {0} to {1}", entity.ToString(), _entities.GetType());
             _entities.Add(entity);
         }
 
@@ -78,7 +78,6 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// <param name="entities"></param>
         public void AddRange(IEnumerable<TEntity> entities)
         {
-            logger.LogDebug("Add entities to {0}", _entities.GetType());
             _entities.AddRange(entities);
         }
 
@@ -88,7 +87,6 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// <param name="entity"></param>
         public void Remove(TEntity entity)
         {
-            logger.LogDebug("Remove entity {0} from {1}", entity.ToString(), _entities.GetType());
             _entities.Remove(entity);
         }
 
@@ -98,7 +96,6 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// <param name="entities"></param>
         public void RemoveRange(IEnumerable<TEntity> entities)
         {
-            logger.LogDebug("Remove enties from {0}", _entities.GetType());
             _entities.RemoveRange(entities);
         }
 

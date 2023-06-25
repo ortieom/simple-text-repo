@@ -6,6 +6,6 @@ namespace TextRepo.DataAccessLayer
     {
         public User User = null!;
 
-        public ContactInfo ContactInfo = null!;
+        public ContactInfo? ContactInfo;
     }
 }

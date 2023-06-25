@@ -1,12 +1,18 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using TextRepo.Commons.Models;
 
 namespace TextRepo.DataAccessLayer.Repositories
 {
+    /// <summary>
+    /// Represents data access layer for ContactInfo
+    /// </summary>
     public class ContactRepository : Repository<ContactInfo>, IContactRepository
     {
-        public ContactRepository(DbContext context, ILogger<ContactRepository> someLogger) : base(context, someLogger)
+        /// <summary>
+        /// Creates ContactRepository with basic Repository methods
+        /// </summary>
+        /// <param name="context"></param>
+        public ContactRepository(DbContext context) : base(context)
         {
         }
     }

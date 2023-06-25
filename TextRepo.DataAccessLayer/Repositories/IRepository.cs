@@ -2,6 +2,9 @@
 
 namespace TextRepo.DataAccessLayer.Repositories
 {
+    /// <summary>
+    /// Interface of basic data access layer for all models
+    /// </summary>
     public interface IRepository<TEntity> where TEntity : class
     {
         /// <summary>

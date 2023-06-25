@@ -2,10 +2,13 @@
 
 namespace TextRepo.DataAccessLayer.Repositories
 {
+    /// <summary>
+    /// Interface of data access layer for Document
+    /// </summary>
     public interface IDocumentRepository : IRepository<Document>
     {
         /// <summary>
-        /// Get documents connected with selected project (queried by pages)
+        /// Gets documents connected with selected project (queried by pages)
         /// </summary>
         /// <param name="project"></param>
         /// <param name="pageNo">Number of requested page (start with 1)</param>

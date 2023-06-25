@@ -1,17 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using TextRepo.Commons.Models;
 
 namespace TextRepo.DataAccessLayer.Repositories
 {
+    /// <summary>
+    /// Represents data access layer for Document
+    /// </summary>
     public class DocumentRepository : Repository<Document>, IDocumentRepository
     {
-        public DocumentRepository(DbContext context, ILogger<DocumentRepository> someLogger) : base(context, someLogger)
+        /// <summary>
+        /// Creates DocumentRepository with basic Repository methods
+        /// </summary>
+        /// <param name="context"></param>
+        public DocumentRepository(DbContext context) : base(context)
         {
         }
 
         /// <summary>
-        /// Get documents connected with selected project (queried by pages)
+        /// Gets documents connected with selected project (queried by pages)
         /// </summary>
         /// <param name="project"></param>
         /// <param name="pageNo">Number of requested page (start with 1)</param>
@@ -19,11 +25,9 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// <returns>Project documents in selected page</returns>
         public ICollection<Document> GetDocumentsInProject(Project project, int pageNo, int pageSize = 50)
         {
-            logger.LogDebug("Requested documents from project {0} page {1}", project.Id, pageNo);
-
-            return (from doc in db.Documents.Include(p => p.Project)
-                    where doc.Project.Id == project.Id
-                    select doc).OrderBy(c => c.Id)
+            return db.Documents
+                .Where(d => d.Project == project)
+                .OrderBy(d => d.Id)
                 .Skip((pageNo - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();

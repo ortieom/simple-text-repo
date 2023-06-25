@@ -2,6 +2,9 @@
 
 namespace TextRepo.DataAccessLayer.Repositories
 {
+    /// <summary>
+    /// Interface of data access layer for User
+    /// </summary>
     public interface IUserRepository : IRepository<User>
     {
         /// <summary>
