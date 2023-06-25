@@ -1,8 +1,17 @@
 namespace TextRepo.DataAccessLayer
 {
+    /// <summary>
+    /// Represents options for database connection
+    /// </summary>
     public class DbSettingsModel
     {
-        public string ConnectionString { get; set; }
+        /// <summary>
+        /// Data source
+        /// </summary>
+        public string ConnectionString { get; set; } = null!;
+        /// <summary>
+        /// Flag for verbose logging output
+        /// </summary>
         public bool Verbose { get; set; }
     }
 }

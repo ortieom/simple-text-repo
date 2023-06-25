@@ -3,10 +3,17 @@ using TextRepo.DataAccessLayer.Repositories;
 
 namespace TextRepo.Services
 {
+    /// <summary>
+    /// Business logic layer for projects
+    /// </summary>
     public class ProjectService
     {
         private readonly IProjectRepository _repo;
-
+        
+        /// <summary>
+        /// Creates business logic layer for projects with reference to repository
+        /// </summary>
+        /// <param name="repo">Project repository</param>
         public ProjectService(IProjectRepository repo)
         {
             _repo = repo;

@@ -4,10 +4,17 @@ using TextRepo.DataAccessLayer.Repositories;
 
 namespace TextRepo.Services
 {
+    /// <summary>
+    /// Business logic layer for users
+    /// </summary>
     public class UserService
     {
         private readonly IUserRepository _repo;
-
+        
+        /// <summary>
+        /// Creates business logic layer for users with reference to repository
+        /// </summary>
+        /// <param name="repo">User repository</param>
         public UserService(IUserRepository repo)
         {
             _repo = repo;

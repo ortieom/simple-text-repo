@@ -1,18 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Hosting;
 using TextRepo.DataAccessLayer.Repositories;
+using TextRepo.DataAccessLayer;
 using TextRepo.Services;
 using TextRepo.MainApp;
 using NLog.Extensions.Logging;
 using NLog;
-using NLog.Config;
-using TextRepo.DataAccessLayer;
-
-// LogManager.Configuration = new NLogLoggingConfiguration(config.GetSection("NLog"));
 
 using IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureAppConfiguration(x =>

@@ -3,13 +3,23 @@ using TextRepo.Services;
 
 namespace TextRepo.MainApp
 {
+    /// <summary>
+    /// Represents temporal program logic for demonstration
+    /// </summary>
     internal class Logic
     {
         private readonly UserService _userService;
         private readonly ProjectService _projectService;
         private readonly DocumentService _docService;
         private readonly ContactService _contactService;
-
+        
+        /// <summary>
+        /// Creates Logic with required services
+        /// </summary>
+        /// <param name="us">User service</param>
+        /// <param name="ps">Project service</param>
+        /// <param name="ds">Document service</param>
+        /// <param name="cs">Contact service</param>
         public Logic(UserService us, ProjectService ps, DocumentService ds, ContactService cs)
         {
             _userService = us;

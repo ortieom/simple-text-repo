@@ -5,21 +5,38 @@ using TextRepo.Commons.ModelConfigs;
 using TextRepo.Commons.Models;
 namespace TextRepo.DataAccessLayer
 {
+    /// <summary>
+    /// Represents a configurable session with the database
+    /// </summary>
     public class Context : DbContext
     {
         private readonly ILoggerFactory _loggerFactory;
-
+        
+        /// <summary>
+        /// A set that is used to query and save User instances  
+        /// </summary>
         public DbSet<User> Users => Set<User>();
+        /// <summary>
+        /// A set that is used to query and save Projects instances  
+        /// </summary>
         public DbSet<Project> Projects => Set<Project>();
+        /// <summary>
+        /// A set that is used to query and save Documents instances  
+        /// </summary>
         public DbSet<Document> Documents => Set<Document>();
+        /// <summary>
+        /// A set that is used to query and save Contacts instances  
+        /// </summary>
         public DbSet<ContactInfo> Contacts => Set<ContactInfo>();
 
         private string DbPath { get; }
         private readonly bool _verbose;
 
         /// <summary>
-        /// Default constructor
+        /// Default constructor with parameters
         /// </summary>
+        /// <param name="loggerFactory"></param>
+        /// <param name="options"></param>
         public Context(ILoggerFactory loggerFactory, IOptions<DbSettingsModel> options)
         {
             _loggerFactory = loggerFactory;
