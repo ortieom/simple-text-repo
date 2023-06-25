@@ -1,55 +1,80 @@
-﻿using DataLib.Models;
-using Services;
+﻿using TextRepo.Commons.Models;
+using TextRepo.Services;
 
-namespace MainApp {
-    internal class Logic {
-        private readonly UserService userService;
-        private readonly ProjectService projectService;
-        private readonly DocumentService docService;
-
-        public Logic(UserService us, ProjectService ps, DocumentService ds) {
-            userService = us;
-            projectService = ps;
-            docService = ds;
+namespace TextRepo.MainApp
+{
+    /// <summary>
+    /// Represents temporal program logic for demonstration
+    /// </summary>
+    internal class Logic
+    {
+        private readonly UserService _userService;
+        private readonly ProjectService _projectService;
+        private readonly DocumentService _docService;
+        private readonly ContactService _contactService;
+        
+        /// <summary>
+        /// Creates Logic with required services
+        /// </summary>
+        /// <param name="us">User service</param>
+        /// <param name="ps">Project service</param>
+        /// <param name="ds">Document service</param>
+        /// <param name="cs">Contact service</param>
+        public Logic(UserService us, ProjectService ps, DocumentService ds, ContactService cs)
+        {
+            _userService = us;
+            _projectService = ps;
+            _docService = ds;
+            _contactService = cs;
         }
 
         /// <summary>
         /// Some temporary code example
         /// </summary>
-        public void TestRun() {
+        public void TestRun()
+        {
             // temporary code
-            User user1 = userService.CreateUser("Artyom", "m@ex.com", "admin");
-            User user2 = userService.CreateUser("Test", "m2@ex.com", "admin");
+            User user1 = _userService.CreateUser("Artyom", "m@ex.com", "admin");
+            User user2 = _userService.CreateUser("Test", "m2@ex.com", "admin");
 
-            userService.AddContactInfo(user1, "tg", "tt");
-            userService.EditContact(user1, type: "vk");
+            _userService.AddContactInfo(user1, "tg", "tt");
+            _contactService.EditContact(user1, type: "vk");
 
-            userService.Edit(user2, name: "edit test");
+            _userService.Edit(user2, name: "edit test");
 
-            User? aUser = userService.GetUser("m@ex.com", "admin");
+            User? aUser = _userService.GetUser("m@ex.com", "admin");
 
-            Project project = projectService.CreateProject(aUser, description: "test desc");
+            if (aUser is null)
+            {
+                throw new Exception("user not found");
+            }
+            
+            Project project = _projectService.CreateProject(aUser, description: "test desc");
 
-            projectService.AddUserToProject(user2, project);
+            _projectService.AddUserToProject(user2, project);
 
-            projectService.Edit(projectService.CreateProject(aUser, name: "name"), description: "hey!");
+            _projectService.Edit(_projectService.CreateProject(aUser, name: "name"), description: "hey!");
 
-            foreach (Project p in projectService.GetUserProjectsPaginated(aUser, 1, 10000)) {
+            foreach (Project p in _projectService.GetUserProjectsPaginated(aUser, 1, 10000))
+            {
                 Console.WriteLine("Project #{0} {1} ({2}) contains users", p.Id, p.Name, p.Description);
-                foreach (User u in userService.GetUsersInProjectPaginated(p, 1, 10000)) {
-                    Console.WriteLine("{0}. {1} {2} {3} (contact {4}: {5})", u.Id, u.Name, u.Surname ?? "", u.Email, 
+                foreach (User u in _userService.GetUsersInProjectPaginated(p, 1, 10000))
+                {
+                    Console.WriteLine("{0}. {1} {2} {3} (contact {4}: {5})", u.Id, u.Name, u.Surname ?? "", u.Email,
                         u.ContactInfo?.Type ?? "", u.ContactInfo?.Value ?? "");
                 }
             }
 
-            docService.CreateDocument(project, text: "новый документ");
-            docService.Delete(docService.CreateDocument(project, text: "2новый документ"));
-            docService.Edit(docService.CreateDocument(project, text: "3новый документ"), text: "Обновлённый текст");
+            _docService.CreateDocument(project, text: "новый документ");
+            _docService.Delete(_docService.CreateDocument(project, text: "2новый документ"));
+            _docService.Edit(_docService.CreateDocument(project, text: "3новый документ"), text: "Обновлённый текст");
 
-            projectService.Delete(project);
+            _projectService.Delete(project);
 
-            userService.Delete(user1);
-            userService.Delete(user2);
+            _userService.Delete(user1);
+            _userService.Delete(user2);
+            
+            Console.WriteLine("End");
         }
     }
 }

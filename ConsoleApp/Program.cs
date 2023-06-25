@@ -1,36 +1,40 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using MainApp;
 using Microsoft.EntityFrameworkCore;
-using DataLib.Repositories;
-using DataLib;
-using Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using NLog;
+using Microsoft.Extensions.Hosting;
+using TextRepo.DataAccessLayer.Repositories;
+using TextRepo.DataAccessLayer;
+using TextRepo.Services;
+using TextRepo.MainApp;
 using NLog.Extensions.Logging;
-
-var config = new ConfigurationBuilder()
-    .AddJsonFile("D:\\Projects\\dotnet-test\\ConsoleApp\\ConsoleApp\\appsettings.json", optional: false, reloadOnChange: true)
-    .Build();
-
-LogManager.Configuration = new NLogLoggingConfiguration(config.GetSection("NLog"));
+using NLog;
 
 using IHost host = Host.CreateDefaultBuilder(args)
-    .ConfigureServices(services => {
-        services.AddSingleton<DbContext, DataLib.Context>();
-        services.AddSingleton<IUserRepository, UserRepository>();
-        services.AddSingleton<IProjectRepository, ProjectRepository>();
-        services.AddSingleton<IDocumentRepository, DocumentRepository>();
-        services.AddSingleton<IUnitOfWork, UnitOfWork>();
+    .ConfigureAppConfiguration(x =>
+    {
+        x.SetBasePath(Directory.GetCurrentDirectory());
+        x.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+    })
+    .ConfigureServices((context, services) =>
+    {
+        services.AddOptions<DbSettingsModel>().Bind(context.Configuration.GetSection("Database"));
+        services.AddScoped<DbContext, Context>();
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IProjectRepository, ProjectRepository>();
+        services.AddScoped<IDocumentRepository, DocumentRepository>();
+        services.AddScoped<IContactRepository, ContactRepository>();
         services.AddTransient<UserService>();
         services.AddTransient<ProjectService>();
         services.AddTransient<DocumentService>();
+        services.AddTransient<ContactService>();
         services.AddTransient<Logic>();
     })
-    .ConfigureLogging(x => {
-        x.ClearProviders();
-        x.AddNLog();
+    .ConfigureLogging((context, logBuilder) =>
+    {
+        LogManager.Configuration = new NLogLoggingConfiguration(context.Configuration.GetSection("NLog"));
+        logBuilder.ClearProviders();
+        logBuilder.AddNLog();
     })
     .Build();
 
@@ -38,7 +42,8 @@ runTest(host.Services);
 
 host.Run();
 
-static void runTest(IServiceProvider hostProvider) {
+static void runTest(IServiceProvider hostProvider)
+{
     using IServiceScope serviceScope = hostProvider.CreateScope();
     IServiceProvider provider = serviceScope.ServiceProvider;
     Logic logic = provider.GetRequiredService<Logic>();
