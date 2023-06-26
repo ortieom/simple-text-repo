@@ -32,5 +32,20 @@ namespace TextRepo.DataAccessLayer.Repositories
                 .Take(pageSize)
                 .ToList();
         }
+        
+        /// <summary>
+        /// Check whether user has access to the document
+        /// </summary>
+        /// <param name="document"></param>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public bool DocumentAccessibleToUser(Document document, User user)
+        {
+            return db.Projects
+                .Where(p =>
+                    p.Users.Any(u => u.Id == user.Id))
+                .Where(p => p.Id == document.ProjectId)
+                .ToList().Count != 0;
+        }
     }
 }

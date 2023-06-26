@@ -27,7 +27,7 @@ namespace TextRepo.Services
         /// <returns>true if user has access</returns>
         public bool HasAccessToDocument(User user, Document document)
         {
-            return document.Project.Users.Contains(user);
+            return _repo.DocumentAccessibleToUser(document, user);
         }
 
         /// <summary>
@@ -84,6 +84,18 @@ namespace TextRepo.Services
             doc.Contents = text ?? doc.Contents;
             _repo.Commit();
             return doc;
+        }
+        
+        /// <summary>
+        /// Get documents connected with project (queried by pages)
+        /// </summary>
+        /// <param name="project"></param>
+        /// <param name="pageNo">Number of requested page (start with 1)</param>
+        /// <param name="pageSize">Count of objects on one page</param>
+        /// <returns>User's projects on selected page</returns>
+        public ICollection<Document> GetProjectDocumentsPaginated(Project project, int pageNo, int pageSize)
+        {
+            return _repo.GetDocumentsInProject(project, pageNo, pageSize);
         }
     }
 }

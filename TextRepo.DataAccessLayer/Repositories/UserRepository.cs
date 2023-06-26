@@ -66,7 +66,7 @@ namespace TextRepo.DataAccessLayer.Repositories
         public ICollection<User> GetUsersInProject(Project project, int pageNo, int pageSize = 50)
         {
             return db.Users
-                .Where(u => u.Projects.Any(p => p == project))
+                .Where(u => u.Projects.Any(p => p.Id == project.Id))
                 .OrderBy(c => c.Id)
                 .Skip((pageNo - 1) * pageSize)
                 .Take(pageSize)

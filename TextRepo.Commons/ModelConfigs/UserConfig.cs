@@ -19,7 +19,7 @@ namespace TextRepo.Commons.ModelConfigs
             builder
                 .HasMany(p => p.Projects)
                 .WithMany(u => u.Users);
-
+            
             // indexes
             builder
                 .HasIndex(u => u.Name);

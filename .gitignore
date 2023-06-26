@@ -476,4 +476,8 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Jetbrains
 .idea
+
+# Key secret location
+/TextRepo.API/secret
