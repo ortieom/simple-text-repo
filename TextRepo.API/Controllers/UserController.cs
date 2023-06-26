@@ -69,7 +69,7 @@ namespace TextRepo.API.Controllers
         }
         
         /// <summary>
-        /// Handles POST to add contact information
+        /// Add contact information
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="type"></param>
@@ -91,7 +91,7 @@ namespace TextRepo.API.Controllers
         }
         
         /// <summary>
-        /// Handles POST to edit user's main data
+        /// Edit user's main data
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="name"></param>
@@ -117,13 +117,13 @@ namespace TextRepo.API.Controllers
         }
         
         /// <summary>
-        /// Handles user delete request
+        /// Remove user
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpDelete]
         [Authorize]
-        [Route("{userId}/delete")]
+        [Route("{userId}")]
         public IActionResult DeleteUser(int userId)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
@@ -138,10 +138,10 @@ namespace TextRepo.API.Controllers
         }
 
         /// <summary>
-        /// Gets user's projects
+        /// Get user's projects by pages of size 50
         /// </summary>
         /// <param name="userId"></param>
-        /// <param name="pageNo"></param>
+        /// <param name="pageNo">from 1</param>
         /// <returns></returns>
         [HttpGet]
         [Authorize]
@@ -156,13 +156,7 @@ namespace TextRepo.API.Controllers
             }
 
             return Ok(
-                new ListResponse<int>
-                {
-                    entities = _projectService
-                        .GetUserProjectsPaginated(user, pageNo, 50)
-                        .Select(p => p.Id)
-                        .ToList()
-                });
+                _projectService.GetUserProjectsPaginated(user!, pageNo, 50));
         }
     }
 }

@@ -27,7 +27,7 @@ namespace TextRepo.Services
         /// <returns>true if user has access</returns>
         public bool HasAccessToDocument(User user, Document document)
         {
-            return document.Project.Users.Contains(user);
+            return _repo.DocumentAccessibleToUser(document, user);
         }
 
         /// <summary>

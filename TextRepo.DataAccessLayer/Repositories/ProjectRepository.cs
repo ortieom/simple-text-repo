@@ -27,11 +27,26 @@ namespace TextRepo.DataAccessLayer.Repositories
         public ICollection<Project> GetUserProjects(User user, int pageNo, int pageSize = 50)
         {
             return db.Projects
-                .Where(p => p.Users.Any(u => u == user))
+                .Where(p => p.Users.Any(u => u.Id == user.Id))
                 .OrderBy(c => c.Id)
                 .Skip((pageNo - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
+        }
+        
+        /// <summary>
+        /// Check whether user has access to the project
+        /// </summary>
+        /// <param name="project"></param>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public bool ProjectContainUser(Project project, User user)
+        {
+            return db.Projects
+                .Where(p =>
+                    p.Users.Any(u => u.Id == user.Id))
+                .Where(p => p.Id == project.Id)
+                .ToList().Count != 0;
         }
     }
 }

@@ -15,5 +15,13 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// <param name="pageSize">Count of objects on one page</param>
         /// <returns>User's projects on selected page</returns>
         public ICollection<Project> GetUserProjects(User user, int pageNo, int pageSize);
+
+        /// <summary>
+        /// Check whether user has access to the project
+        /// </summary>
+        /// <param name="project"></param>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public bool ProjectContainUser(Project project, User user);
     }
 }
