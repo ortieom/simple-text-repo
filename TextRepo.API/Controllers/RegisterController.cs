@@ -46,9 +46,9 @@ namespace TextRepo.API.Controllers
                 return BadRequest("User already exists");
             }
         
-            _userService.CreateUser(email: email, password: password, name: name);
+            var user = _userService.CreateUser(email: email, password: password, name: name);
             
-            var claims = new List<Claim> {new Claim("email", email) };
+            var claims = new List<Claim> {new Claim(ClaimTypes.Email, email) };
             var jwt = new JwtSecurityToken(
                 issuer: _authOptions.Value.Issuer,
                 claims: claims,
@@ -60,6 +60,7 @@ namespace TextRepo.API.Controllers
             return Ok(new AuthResponse
             {
                 Username = name,
+                UserId = user.Id,
                 Email =  email,
                 Token = new JwtSecurityTokenHandler().WriteToken(jwt)
             });

@@ -65,7 +65,7 @@ namespace TextRepo.API.Controllers
                 return Unauthorized();
             }
             
-            var claims = new List<Claim> {new Claim("email", email) };
+            var claims = new List<Claim> {new Claim(ClaimTypes.Email, email) };
             var jwt = new JwtSecurityToken(
                 issuer: _authOptions.Value.Issuer,
                 claims: claims,
@@ -77,6 +77,7 @@ namespace TextRepo.API.Controllers
             return Ok(new AuthResponse
             {
                 Username = user.Name + " " + user.Surname,
+                UserId = user.Id,
                 Email =  user.Email,
                 Token = new JwtSecurityTokenHandler().WriteToken(jwt)
             });

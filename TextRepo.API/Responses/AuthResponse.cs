@@ -10,7 +10,11 @@ namespace TextRepo.API.Responses
         /// </summary>
         public string Username { get; set; } = null!;
         /// <summary>
-        /// User primary identifier
+        /// User primary key
+        /// </summary>
+        public int UserId { get; set; }
+        /// <summary>
+        /// Another user identifier
         /// </summary>
         public string Email { get; set; } = null!;
         /// <summary>
