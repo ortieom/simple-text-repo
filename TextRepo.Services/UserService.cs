@@ -1,4 +1,5 @@
 ﻿using TextRepo.Commons.Models;
+using TextRepo.DataAccessLayer;
 using BC = BCrypt.Net.BCrypt;
 using TextRepo.DataAccessLayer.Repositories;
 
@@ -70,6 +71,17 @@ namespace TextRepo.Services
             _repo.Commit();
 
             return user;
+        }
+        
+        /// <summary>
+        /// Checks whether user with email exist in db
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        public bool ExistUser(string email)
+        {
+            UserInfo? user = _repo.GetUserInfoByEmail(email);
+            return user is not null;
         }
 
         /// <summary>
