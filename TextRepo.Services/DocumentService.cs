@@ -85,5 +85,17 @@ namespace TextRepo.Services
             _repo.Commit();
             return doc;
         }
+        
+        /// <summary>
+        /// Get documents connected with project (queried by pages)
+        /// </summary>
+        /// <param name="project"></param>
+        /// <param name="pageNo">Number of requested page (start with 1)</param>
+        /// <param name="pageSize">Count of objects on one page</param>
+        /// <returns>User's projects on selected page</returns>
+        public ICollection<Document> GetProjectDocumentsPaginated(Project project, int pageNo, int pageSize)
+        {
+            return _repo.GetDocumentsInProject(project, pageNo, pageSize);
+        }
     }
 }
