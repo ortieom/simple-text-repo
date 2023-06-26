@@ -15,6 +15,11 @@ namespace TextRepo.Commons.ModelConfigs
         /// <param name="builder"></param>
         public void Configure(EntityTypeBuilder<User> builder)
         {
+            // many users to many projects
+            builder
+                .HasMany(p => p.Projects)
+                .WithMany(u => u.Users);
+            
             // indexes
             builder
                 .HasIndex(u => u.Name);

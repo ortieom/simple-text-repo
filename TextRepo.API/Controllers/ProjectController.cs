@@ -4,6 +4,8 @@ using System.Security.Claims;
 using TextRepo.API.Tools;
 using TextRepo.Commons.Models;
 using TextRepo.Services;
+using System.Linq;
+
 namespace TextRepo.API.Controllers
 {
     /// <summary>
@@ -182,7 +184,29 @@ namespace TextRepo.API.Controllers
         }
         
         /// <summary>
-        /// Get project's documents by pages of size 50
+        /// Create new document in project
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Authorize]
+        [Route("{projectId}/adddocument")]
+        public IActionResult CreateDocument(int projectId)
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var user = TokenEntities.getUser(identity, _userService);
+            var project = _projectService.Get(projectId);
+            if (!HasAccess(user, project))
+            {
+                return Unauthorized();
+            }
+
+            var doc = _documentService.CreateDocument(project!);
+            return Ok(doc.Id);
+        }
+        
+        /// <summary>
+        /// Get project's document's id by pages of size 50
         /// </summary>
         /// <param name="projectId"></param>
         /// <param name="pageNo">from 1</param>
@@ -199,9 +223,12 @@ namespace TextRepo.API.Controllers
             {
                 return Unauthorized();
             }
-            
-            return Ok(_documentService.GetProjectDocumentsPaginated(project!, pageNo, 50));
-        }
 
+            var result = _documentService
+                .GetProjectDocumentsPaginated(project!, pageNo, 50)
+                .Select(d => d.Id).ToList();
+            
+            return Ok(result);
+        }
     }
 }

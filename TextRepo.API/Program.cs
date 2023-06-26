@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -67,6 +67,9 @@ builder.Services.AddTransient<UserService>();
 builder.Services.AddTransient<ProjectService>();
 builder.Services.AddTransient<DocumentService>();
 builder.Services.AddTransient<ContactService>();
+
+builder.Services.AddControllers().AddNewtonsoftJson(x =>
+    x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
 // jwt
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
