@@ -39,13 +39,13 @@ namespace TextRepo.API.Controllers
             
             IEnumerable<Claim> claim = identity.Claims; 
 
-            var usernameClaim = claim
+            var userEmailClaim = claim
                 .FirstOrDefault(x => x.Type == ClaimTypes.Email);
 
-            if (usernameClaim is null)
+            if (userEmailClaim is null)
                 return false;
             
-            return usernameClaim.Value == target.Email;
+            return userEmailClaim.Value == target.Email;
         } 
         
         /// <summary>

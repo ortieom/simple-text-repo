@@ -52,6 +52,16 @@ namespace TextRepo.Services
         {
             return _repo.Get(id);
         }
+        
+        /// <summary>
+        /// Get user by email
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns>User with corresponding email</returns>
+        public User? GetByEmail(string email)
+        {
+            return _repo.GetUserInfoByEmail(email)?.User;
+        }
 
         /// <summary>
         /// Create new user with necessary and optional parameters
