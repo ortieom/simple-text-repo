@@ -63,7 +63,7 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// <param name="pageNo">Number of requested page (start with 1)</param>
         /// <param name="pageSize">Count of objects on one page</param>
         /// <returns>Users in project on selected page</returns>
-        public ICollection<User> GetUsersInProject(Project project, int pageNo, int pageSize = 50)
+        public ICollection<User> GetUsersInProject(Project project, int pageNo, int pageSize = 50)  // TODO: id
         {
             return db.Users
                 .Where(u => u.Projects.Any(p => p.Id == project.Id))

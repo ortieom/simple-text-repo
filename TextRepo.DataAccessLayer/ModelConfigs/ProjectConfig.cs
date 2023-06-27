@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TextRepo.Commons.Models;
 
-namespace TextRepo.Commons.ModelConfigs
+namespace TextRepo.DataAccessLayer.ModelConfigs
 {
     /// <summary>
     /// Implements IEntityTypeConfiguration interface defining Project configuration

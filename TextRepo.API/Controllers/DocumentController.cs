@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using TextRepo.API.Responses;
 using TextRepo.API.Tools;
 using TextRepo.Commons.Models;
 using TextRepo.Services;
@@ -55,7 +54,7 @@ namespace TextRepo.API.Controllers
         public IActionResult GetDocumentInfo(int documentId)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var user = TokenEntities.getUser(identity, _userService);
+            var user = TokenEntities.GetUser(identity, _userService);
             var document = _documentService.Get(documentId);
             if (!HasAccess(user, document))
             {
@@ -80,7 +79,7 @@ namespace TextRepo.API.Controllers
             string? description = null, string? text = null)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var user = TokenEntities.getUser(identity, _userService);
+            var user = TokenEntities.GetUser(identity, _userService);
             var document = _documentService.Get(documentId);
             if (!HasAccess(user, document))
             {
@@ -102,7 +101,7 @@ namespace TextRepo.API.Controllers
         public IActionResult DeleteProject(int documentId)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var user = TokenEntities.getUser(identity, _userService);
+            var user = TokenEntities.GetUser(identity, _userService);
             var document = _documentService.Get(documentId);
             if (!HasAccess(user, document))
             {

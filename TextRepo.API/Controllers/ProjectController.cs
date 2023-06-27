@@ -56,7 +56,7 @@ namespace TextRepo.API.Controllers
         public IActionResult GetProjectInfo(int projectId)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var user = TokenEntities.getUser(identity, _userService);
+            var user = TokenEntities.GetUser(identity, _userService);
             var project = _projectService.Get(projectId);
             if (!HasAccess(user, project))
             {
@@ -81,7 +81,7 @@ namespace TextRepo.API.Controllers
         public IActionResult CreateProject()
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var user = TokenEntities.getUser(identity, _userService);
+            var user = TokenEntities.GetUser(identity, _userService);
             var project = _projectService.CreateProject(user!);
             return Ok(project.Id);
         }
@@ -99,7 +99,7 @@ namespace TextRepo.API.Controllers
         public IActionResult EditProject(int projectId, string? name = null, string? description = null)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var user = TokenEntities.getUser(identity, _userService);
+            var user = TokenEntities.GetUser(identity, _userService);
             var project = _projectService.Get(projectId);
             if (!HasAccess(user, project))
             {
@@ -122,7 +122,7 @@ namespace TextRepo.API.Controllers
         public IActionResult AddUser(int projectId, int addedUserId)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var user = TokenEntities.getUser(identity, _userService);
+            var user = TokenEntities.GetUser(identity, _userService);
             var project = _projectService.Get(projectId);
             if (!HasAccess(user, project))
             {
@@ -150,7 +150,7 @@ namespace TextRepo.API.Controllers
         public IActionResult DeleteProject(int projectId)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var user = TokenEntities.getUser(identity, _userService);
+            var user = TokenEntities.GetUser(identity, _userService);
             var project = _projectService.Get(projectId);
             if (!HasAccess(user, project))
             {
@@ -173,7 +173,7 @@ namespace TextRepo.API.Controllers
         public IActionResult ListUser(int projectId, int pageNo = 1)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var user = TokenEntities.getUser(identity, _userService);
+            var user = TokenEntities.GetUser(identity, _userService);
             var project = _projectService.Get(projectId);
             if (!HasAccess(user, project))
             {
@@ -194,7 +194,7 @@ namespace TextRepo.API.Controllers
         public IActionResult CreateDocument(int projectId)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var user = TokenEntities.getUser(identity, _userService);
+            var user = TokenEntities.GetUser(identity, _userService);
             var project = _projectService.Get(projectId);
             if (!HasAccess(user, project))
             {
@@ -217,7 +217,7 @@ namespace TextRepo.API.Controllers
         public IActionResult ListDocuments(int projectId, int pageNo = 1)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var user = TokenEntities.getUser(identity, _userService);
+            var user = TokenEntities.GetUser(identity, _userService);
             var project = _projectService.Get(projectId);
             if (!HasAccess(user, project))
             {

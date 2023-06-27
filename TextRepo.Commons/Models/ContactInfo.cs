@@ -12,7 +12,7 @@
         /// <summary>
         /// Reference to holder of this property
         /// </summary>
-        public virtual User User { get; set; } = null!;
+        public User User { get; set; } = null!;
     
         /// <summary>
         /// Represents type of contact (email, tg, etc.)

@@ -31,24 +31,7 @@ namespace TextRepo.API.Controllers
             _authOptions = authOptions;
             _userService = userService;
         }
-        
-        /// <summary>
-        /// Handles GET request - returns login form with email and password
-        /// </summary>
-        [HttpGet]
-        public async Task Login()
-        {
-            string content = @"<form method='post'>
-                <label>Email:</label><br />
-                <input email='email' /><br />
-                <label>Password:</label><br />
-                <input type='password' name='password' /><br />
-                <input type='submit' value='Send' />
-            </form>";
-            Response.ContentType = "text/html;charset=utf-8";
-            await Response.WriteAsync(content);
-        }
-        
+
         /// <summary>
         /// Handles POST login request
         /// </summary>

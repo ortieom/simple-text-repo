@@ -13,10 +13,6 @@ using NLog.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Settings location
-builder.Configuration.SetBasePath(Directory.GetCurrentDirectory());
-builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-
 // IOptions
 builder.Services.AddOptions<DbSettingsModel>().Bind(builder.Configuration.GetSection("Database"));
 builder.Services.AddOptions<AuthOptionsModel>().Bind(builder.Configuration.GetSection("JWT"));
@@ -57,8 +53,11 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 
+// database
+builder.Services.AddDbContext<Context>(context =>
+    context.UseSqlite(builder.Configuration.GetSection("Database:ConnectionString").Value));
+
 // load everything
-builder.Services.AddScoped<DbContext, Context>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
