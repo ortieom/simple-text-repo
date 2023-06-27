@@ -22,28 +22,6 @@ namespace TextRepo.API.Services
         }
 
         /// <summary>
-        /// Get hashed password
-        /// </summary>
-        /// <param name="password"></param>
-        /// <returns>Hashed password</returns>
-        private string HashPassword(string password)
-        {
-            return BC.HashPassword(password);
-        }
-
-        /// <summary>
-        /// Compare stored password with one provided by user
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        private bool ValidatePassword(User user, string password)
-        {
-            return BC.Verify(password, user.HashedPassword);
-            ;
-        }
-
-        /// <summary>
         /// Get user by id
         /// </summary>
         /// <param name="id"></param>
@@ -177,6 +155,26 @@ namespace TextRepo.API.Services
             _repo.Commit();
         }
 
-        
+        /// <summary>
+        /// Get hashed password
+        /// </summary>
+        /// <param name="password"></param>
+        /// <returns>Hashed password</returns>
+        private string HashPassword(string password)
+        {
+            return BC.HashPassword(password);
+        }
+
+        /// <summary>
+        /// Compare stored password with one provided by user
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        private bool ValidatePassword(User user, string password)
+        {
+            return BC.Verify(password, user.HashedPassword);
+            ;
+        }
     }
 }

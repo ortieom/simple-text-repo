@@ -99,10 +99,10 @@ namespace TextRepo.API.Controllers
         /// <param name="email"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPut]
         [Authorize]
         [Route("{userId}/edit")]
-        public IActionResult EditResult(int userId, string? name = null, string? surname = null, string? email = null,
+        public IActionResult EditUser(int userId, string? name = null, string? surname = null, string? email = null,
             string? password = null)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;

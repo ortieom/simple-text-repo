@@ -28,21 +28,7 @@ namespace TextRepo.API.Controllers
             _projectService = projectService;
             _documentService = documentService;
         }
-        
-        /// <summary>
-        /// Check whether user can do this action with document
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="document"></param>
-        /// <returns></returns>
-        private bool HasAccess(User? user, Document? document)
-        {
-            if (user is null || document is null)
-                return false;
-            
-            return _documentService.HasAccessToDocument(user, document);
-        } 
-        
+
         /// <summary>
         /// Get document with corresponding id
         /// </summary>
@@ -72,7 +58,7 @@ namespace TextRepo.API.Controllers
         /// <param name="description"></param>
         /// <param name="text"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPut]
         [Authorize]
         [Route("{documentId}/edit")]
         public IActionResult EditDocument(int documentId, string? title = null,
@@ -111,5 +97,19 @@ namespace TextRepo.API.Controllers
             _documentService.Delete(document!);
             return Ok();
         }
+                
+        /// <summary>
+        /// Check whether user can do this action with document
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="document"></param>
+        /// <returns></returns>
+        private bool HasAccess(User? user, Document? document)
+        {
+            if (user is null || document is null)
+                return false;
+            
+            return _documentService.HasAccessToDocument(user, document);
+        } 
     }
 }

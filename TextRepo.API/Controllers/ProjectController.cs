@@ -30,21 +30,7 @@ namespace TextRepo.API.Controllers
             _projectService = projectService;
             _documentService = documentService;
         }
-        
-        /// <summary>
-        /// Check whether user can do this action with project
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="project"></param>
-        /// <returns></returns>
-        private bool HasAccess(User? user, Project? project)
-        {
-            if (user is null || project is null)
-                return false;
-            
-            return _projectService.HasAccessToProject(user, project);
-        } 
-        
+
         /// <summary>
         /// Get information about project with corresponding id
         /// </summary>
@@ -93,7 +79,7 @@ namespace TextRepo.API.Controllers
         /// <param name="name"></param>
         /// <param name="description"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPut]
         [Authorize]
         [Route("{projectId}/edit")]
         public IActionResult EditProject(int projectId, string? name = null, string? description = null)
@@ -230,5 +216,19 @@ namespace TextRepo.API.Controllers
             
             return Ok(result);
         }
+        
+        /// <summary>
+        /// Check whether user can do this action with project
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="project"></param>
+        /// <returns></returns>
+        private bool HasAccess(User? user, Project? project)
+        {
+            if (user is null || project is null)
+                return false;
+            
+            return _projectService.HasAccessToProject(user, project);
+        } 
     }
 }
