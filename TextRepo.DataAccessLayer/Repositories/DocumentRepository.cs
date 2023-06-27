@@ -42,7 +42,7 @@ namespace TextRepo.DataAccessLayer.Repositories
         public bool DocumentAccessibleToUser(Document document, User user)
         {
             return db.ProjectUser
-                .Count(pu => pu.ProjectsId == document.ProjectId && pu.UsersId == user.Id) > 0;
+                .Count(pu => pu.ProjectId == document.ProjectId && pu.UserId == user.Id) > 0;
         }
     }
 }

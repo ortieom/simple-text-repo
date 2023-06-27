@@ -9,8 +9,8 @@ namespace TextRepo.API.Controllers
     /// <summary>
     /// Controllers related to documents.
     /// </summary>
-    [Route("document")]
-    public class DocumentController : Controller
+    [Route("[controller]")]
+    public class DocumentsController : Controller
     {
         private readonly UserService _userService;
         private readonly ProjectService _projectService;
@@ -22,7 +22,7 @@ namespace TextRepo.API.Controllers
         /// <param name="userService"></param>
         /// <param name="projectService"></param>
         /// <param name="documentService"></param>
-        public DocumentController(UserService userService, ProjectService projectService, DocumentService documentService)
+        public DocumentsController(UserService userService, ProjectService projectService, DocumentService documentService)
         {
             _userService = userService;
             _projectService = projectService;
@@ -60,7 +60,7 @@ namespace TextRepo.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Authorize]
-        [Route("{documentId}/edit")]
+        [Route("{documentId}")]
         public IActionResult EditDocument(int documentId, string? title = null,
             string? description = null, string? text = null)
         {

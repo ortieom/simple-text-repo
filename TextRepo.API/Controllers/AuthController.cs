@@ -14,7 +14,7 @@ namespace TextRepo.API.Controllers
     /// Login form 
     /// </summary>
     [ApiController]
-    [Route("login")]
+    [Route("[controller]")]
     [Produces("application/json")]
     public class LoginController : Controller
     {

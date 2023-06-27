@@ -9,8 +9,8 @@ namespace TextRepo.API.Controllers
     /// <summary>
     /// Controllers related to users.
     /// </summary>
-    [Route("user")]
-    public class UserController : Controller
+    [Route("[controller]")]
+    public class UsersController : Controller
     {
         private readonly UserService _userService;
         private readonly ProjectService _projectService;
@@ -20,7 +20,7 @@ namespace TextRepo.API.Controllers
         /// </summary>
         /// <param name="userService"></param>
         /// <param name="projectService"></param>
-        public UserController(UserService userService, ProjectService projectService)
+        public UsersController(UserService userService, ProjectService projectService)
         {
             _userService = userService;
             _projectService = projectService;
@@ -101,7 +101,7 @@ namespace TextRepo.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Authorize]
-        [Route("{userId}/edit")]
+        [Route("{userId}")]
         public IActionResult EditUser(int userId, string? name = null, string? surname = null, string? email = null,
             string? password = null)
         {

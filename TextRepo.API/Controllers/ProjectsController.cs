@@ -11,8 +11,8 @@ namespace TextRepo.API.Controllers
     /// <summary>
     /// Controllers related to projects.
     /// </summary>
-    [Route("project")]
-    public class ProjectController : Controller
+    [Route("[controller]")]
+    public class ProjectsController : Controller
     {
         private readonly UserService _userService;
         private readonly ProjectService _projectService;
@@ -24,7 +24,7 @@ namespace TextRepo.API.Controllers
         /// <param name="userService"></param>
         /// <param name="projectService"></param>
         /// <param name="documentService"></param>
-        public ProjectController(UserService userService, ProjectService projectService, DocumentService documentService)
+        public ProjectsController(UserService userService, ProjectService projectService, DocumentService documentService)
         {
             _userService = userService;
             _projectService = projectService;
@@ -81,7 +81,7 @@ namespace TextRepo.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Authorize]
-        [Route("{projectId}/edit")]
+        [Route("{projectId}")]
         public IActionResult EditProject(int projectId, string? name = null, string? description = null)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;

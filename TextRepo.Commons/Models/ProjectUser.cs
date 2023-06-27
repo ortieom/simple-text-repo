@@ -8,7 +8,7 @@ namespace TextRepo.Commons.Models
         /// <summary>
         /// Id of connected User
         /// </summary>
-        public int UsersId { get; set; }
+        public int UserId { get; set; }
         /// <summary>
         /// Connected User
         /// </summary>
@@ -17,7 +17,7 @@ namespace TextRepo.Commons.Models
         /// <summary>
         /// Id of connected Project
         /// </summary>
-        public int ProjectsId { get; set; }
+        public int ProjectId { get; set; }
         /// <summary>
         /// Connected Project
         /// </summary>

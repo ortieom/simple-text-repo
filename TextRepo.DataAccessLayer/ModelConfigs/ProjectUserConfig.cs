@@ -15,19 +15,19 @@ namespace TextRepo.DataAccessLayer.ModelConfigs
         public void Configure(EntityTypeBuilder<ProjectUser> builder)
         {
             // unique pair
-            builder.HasKey(pu => new { pu.UsersId, pu.ProjectsId });
+            builder.HasKey(pu => new { pu.UserId, pu.ProjectId });
 
             // one user to many joining entities
             builder
                 .HasOne<User>(pu => pu.User)
                 .WithMany(u => u.ProjectUsers)
-                .HasForeignKey(pu => pu.UsersId);
+                .HasForeignKey(pu => pu.UserId);
 
             // one project to many joining entities
             builder
                 .HasOne<Project>(pu => pu.Project)
-                .WithMany(u => u.ProjectUsers)
-                .HasForeignKey(pu => pu.ProjectsId);
+                .WithMany(p => p.ProjectUsers)
+                .HasForeignKey(pu => pu.ProjectId);
         }
     }
 }

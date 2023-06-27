@@ -23,17 +23,11 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// <returns>UserInfo object</returns>
         public UserInfo? GetUserInfoById(int userId)
         {
-            var request = db.Users
-                .Where(u => u.Id == userId)
-                .GroupJoin(
-                    db.Contacts, 
-                    u => u.Id,
-                    ci => ci.User.Id,
-                    (x,y) => new { User = x, ContactInfos = y })
-                .SelectMany(
-                    x => x.ContactInfos.DefaultIfEmpty(),
-                    (x,y) => new UserInfo() { User = x.User, ContactInfo = y});
-            return request.SingleOrDefault();
+            var user = db.Users
+                .Include(x => x.ContactInfo)
+                .SingleOrDefault(u => u.Id == userId);
+
+            return user is null ? null : new UserInfo {User = user, ContactInfo = user?.ContactInfo};
         }
 
         /// <summary>
@@ -43,17 +37,11 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// <returns>UserInfo object</returns>
         public UserInfo? GetUserInfoByEmail(string email)
         {
-            var request = db.Users
-                .Where(u => u.Email == email)
-                .GroupJoin(
-                    db.Contacts, 
-                    u => u.Id,
-                    ci => ci.User.Id,
-                    (x,y) => new { User = x, ContactInfos = y })
-                .SelectMany(
-                    x => x.ContactInfos.DefaultIfEmpty(),
-                    (x,y) => new UserInfo() { User = x.User, ContactInfo = y});
-            return request.SingleOrDefault();
+            var user = db.Users
+                .Include(x => x.ContactInfo)
+                .SingleOrDefault(u => u.Email == email);
+
+            return user is null ? null : new UserInfo {User = user, ContactInfo = user?.ContactInfo};
         }
 
         /// <summary>

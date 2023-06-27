@@ -13,7 +13,7 @@ namespace TextRepo.API.Controllers
     /// Registration 
     /// </summary>
     [ApiController]
-    [Route("register")]
+    [Route("[controller]")]
     [Produces("application/json")]
     public class RegisterController : Controller
     {
