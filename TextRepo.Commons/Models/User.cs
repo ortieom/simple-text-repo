@@ -34,6 +34,10 @@
         /// <summary>
         /// Reference to all projects where user has access
         /// </summary>
-        public List<Project> Projects { get; set; } = new(); // transparent many-to-many
+        public List<Project> Projects { get; set; } = new(); // many-to-many
+        /// <summary>
+        /// Reference to all user-project joining entities
+        /// </summary>
+        public List<ProjectUser> ProjectUsers { get; set; } = new(); // one user to many entities
     }
 }

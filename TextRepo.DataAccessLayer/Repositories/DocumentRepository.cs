@@ -12,7 +12,7 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// Creates DocumentRepository with basic Repository methods
         /// </summary>
         /// <param name="context"></param>
-        public DocumentRepository(DbContext context) : base(context)
+        public DocumentRepository(Context context) : base(context)
         {
         }
 
@@ -41,11 +41,8 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// <returns></returns>
         public bool DocumentAccessibleToUser(Document document, User user)
         {
-            return db.Projects
-                .Where(p =>
-                    p.Users.Any(u => u.Id == user.Id))
-                .Where(p => p.Id == document.ProjectId)
-                .ToList().Count != 0;
+            return db.ProjectUser
+                .Count(pu => pu.ProjectsId == document.ProjectId && pu.UsersId == user.Id) > 0;
         }
     }
 }

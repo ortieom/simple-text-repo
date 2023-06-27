@@ -12,7 +12,7 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// Creates UserRepository with basic Repository methods
         /// </summary>
         /// <param name="context"></param>
-        public UserRepository(DbContext context) : base(context)
+        public UserRepository(Context context) : base(context)
         {
         }
 
@@ -65,8 +65,9 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// <returns>Users in project on selected page</returns>
         public ICollection<User> GetUsersInProject(Project project, int pageNo, int pageSize = 50)  // TODO: id
         {
-            return db.Users
-                .Where(u => u.Projects.Any(p => p.Id == project.Id))
+            return db.Projects
+                .Where(x => x.Id == project.Id)
+                .SelectMany(s => s.Users)                
                 .OrderBy(c => c.Id)
                 .Skip((pageNo - 1) * pageSize)
                 .Take(pageSize)

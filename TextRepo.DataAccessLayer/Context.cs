@@ -9,6 +9,10 @@ namespace TextRepo.DataAccessLayer
     /// </summary>
     public class Context : DbContext
     {
+        public Context(DbContextOptions<Context> options) : base(options)
+        {
+        }
+        
         /// <summary>
         /// A set that is used to query and save User instances  
         /// </summary>
@@ -25,6 +29,10 @@ namespace TextRepo.DataAccessLayer
         /// A set that is used to query and save Contacts instances  
         /// </summary>
         public DbSet<ContactInfo> Contacts => Set<ContactInfo>();
+        /// <summary>
+        /// A set that is used to query and save ProjectUser joining instances  
+        /// </summary>
+        public DbSet<ProjectUser> ProjectUser => Set<ProjectUser>();
 
         /// <summary>
         /// Fluent API configurations
@@ -41,3 +49,4 @@ namespace TextRepo.DataAccessLayer
         }
     }
 }
+// ExplicitProjectUserConnection

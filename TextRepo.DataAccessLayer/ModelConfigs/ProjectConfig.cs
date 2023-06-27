@@ -15,6 +15,12 @@ namespace TextRepo.DataAccessLayer.ModelConfigs
         /// <param name="builder"></param>
         public void Configure(EntityTypeBuilder<Project> builder)
         {
+            // many projects to many users
+            builder
+                .HasMany(p => p.Users)
+                .WithMany(u => u.Projects)
+                .UsingEntity<ProjectUser>();
+            
             // one project to many documents
             builder
                 .HasMany(p => p.Documents)
