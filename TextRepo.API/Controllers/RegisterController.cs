@@ -5,7 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using TextRepo.API.Tools;
 using TextRepo.API.Responses;
-using TextRepo.Services;
+using TextRepo.API.Services;
 
 namespace TextRepo.API.Controllers
 {

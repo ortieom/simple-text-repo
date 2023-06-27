@@ -1,6 +1,6 @@
 using System.Security.Claims;
 using TextRepo.Commons.Models;
-using TextRepo.Services;
+using TextRepo.API.Services;
 namespace TextRepo.API.Tools
 {
     /// <summary>

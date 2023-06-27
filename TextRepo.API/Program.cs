@@ -7,7 +7,7 @@ using TextRepo.API;
 using TextRepo.API.Tools;
 using TextRepo.DataAccessLayer;
 using TextRepo.DataAccessLayer.Repositories;
-using TextRepo.Services;
+using TextRepo.API.Services;
 using NLog;
 using NLog.Extensions.Logging;
 

@@ -1,7 +1,7 @@
 using TextRepo.DataAccessLayer.Repositories;
 using TextRepo.Commons.Models;
 
-namespace TextRepo.Services
+namespace TextRepo.API.Services
 {
     /// <summary>
     /// Business logic layer for contacts

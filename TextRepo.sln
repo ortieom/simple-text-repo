@@ -3,17 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33801.468
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextRepo.MainApp", "ConsoleApp\TextRepo.MainApp.csproj", "{84FCFCDC-8C87-4C2C-A84F-1C0B09D00A0C}"
-	ProjectSection(ProjectDependencies) = postProject
-		{2457A17E-1C10-46C7-A061-611E5902BE4B} = {2457A17E-1C10-46C7-A061-611E5902BE4B}
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextRepo.DataAccessLayer", "TextRepo.DataAccessLayer\TextRepo.DataAccessLayer.csproj", "{6136B9F9-0237-4AF3-A6AB-B3814D0B8A71}"
-	ProjectSection(ProjectDependencies) = postProject
-		{2457A17E-1C10-46C7-A061-611E5902BE4B} = {2457A17E-1C10-46C7-A061-611E5902BE4B}
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextRepo.Services", "TextRepo.Services\TextRepo.Services.csproj", "{4F35D106-3014-4A8A-8292-601F52F652B7}"
 	ProjectSection(ProjectDependencies) = postProject
 		{2457A17E-1C10-46C7-A061-611E5902BE4B} = {2457A17E-1C10-46C7-A061-611E5902BE4B}
 	EndProjectSection
@@ -28,18 +18,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{84FCFCDC-8C87-4C2C-A84F-1C0B09D00A0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{84FCFCDC-8C87-4C2C-A84F-1C0B09D00A0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{84FCFCDC-8C87-4C2C-A84F-1C0B09D00A0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{84FCFCDC-8C87-4C2C-A84F-1C0B09D00A0C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6136B9F9-0237-4AF3-A6AB-B3814D0B8A71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6136B9F9-0237-4AF3-A6AB-B3814D0B8A71}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6136B9F9-0237-4AF3-A6AB-B3814D0B8A71}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6136B9F9-0237-4AF3-A6AB-B3814D0B8A71}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4F35D106-3014-4A8A-8292-601F52F652B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4F35D106-3014-4A8A-8292-601F52F652B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4F35D106-3014-4A8A-8292-601F52F652B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4F35D106-3014-4A8A-8292-601F52F652B7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2457A17E-1C10-46C7-A061-611E5902BE4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2457A17E-1C10-46C7-A061-611E5902BE4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2457A17E-1C10-46C7-A061-611E5902BE4B}.Release|Any CPU.ActiveCfg = Release|Any CPU

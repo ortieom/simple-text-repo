@@ -3,7 +3,7 @@ using TextRepo.DataAccessLayer;
 using BC = BCrypt.Net.BCrypt;
 using TextRepo.DataAccessLayer.Repositories;
 
-namespace TextRepo.Services
+namespace TextRepo.API.Services
 {
     /// <summary>
     /// Business logic layer for users

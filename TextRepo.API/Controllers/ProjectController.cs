@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using TextRepo.API.Tools;
 using TextRepo.Commons.Models;
-using TextRepo.Services;
+using TextRepo.API.Services;
 using System.Linq;
 
 namespace TextRepo.API.Controllers

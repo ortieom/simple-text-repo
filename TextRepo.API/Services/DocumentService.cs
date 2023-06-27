@@ -1,7 +1,7 @@
 ﻿using TextRepo.Commons.Models;
 using TextRepo.DataAccessLayer.Repositories;
 
-namespace TextRepo.Services
+namespace TextRepo.API.Services
 {
     /// <summary>
     /// Business logic layer for documents
