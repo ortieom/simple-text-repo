@@ -10,6 +10,7 @@ using TextRepo.DataAccessLayer.Repositories;
 using TextRepo.API.Services;
 using NLog;
 using NLog.Extensions.Logging;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,6 +52,9 @@ builder.Services.AddSwaggerGen(option =>
             new string[]{}
         }
     });
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    option.IncludeXmlComments(xmlPath);
 });
 
 // database

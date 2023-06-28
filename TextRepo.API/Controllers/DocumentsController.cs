@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -43,6 +44,7 @@ namespace TextRepo.API.Controllers
         [HttpGet]
         [Authorize]
         [Route("{documentId}")]
+        [ProducesResponseType(typeof(DocumentResponseDto), 200)]
         public IActionResult GetDocumentInfo(int documentId)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
@@ -50,7 +52,7 @@ namespace TextRepo.API.Controllers
             var document = _documentService.Get(documentId);
             if (!HasAccess(user, document))
             {
-                return Unauthorized();
+                return Forbid();
             }
 
             return Ok(_mapper.Map<DocumentResponseDto>(document));
@@ -65,6 +67,7 @@ namespace TextRepo.API.Controllers
         [HttpPut]
         [Authorize]
         [Route("{documentId}")]
+        [ProducesResponseType(200)]
         public IActionResult EditDocument(int documentId, DocumentRequestDto documentRequest)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
@@ -72,7 +75,7 @@ namespace TextRepo.API.Controllers
             var document = _documentService.Get(documentId);
             if (!HasAccess(user, document))
             {
-                return Unauthorized();
+                return Forbid();
             }
 
             var newDoc = _mapper.Map<Document>(documentRequest);
@@ -89,6 +92,7 @@ namespace TextRepo.API.Controllers
         [HttpDelete]
         [Authorize]
         [Route("{documentId}")]
+        [ProducesResponseType(200)]
         public IActionResult DeleteProject(int documentId)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
@@ -96,7 +100,7 @@ namespace TextRepo.API.Controllers
             var document = _documentService.Get(documentId);
             if (!HasAccess(user, document))
             {
-                return Unauthorized();
+                return Forbid();
             }
             
             _documentService.Delete(document!);

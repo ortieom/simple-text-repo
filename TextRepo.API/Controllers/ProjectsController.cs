@@ -44,6 +44,7 @@ namespace TextRepo.API.Controllers
         [HttpGet]
         [Authorize]
         [Route("{projectId}")]
+        [ProducesResponseType(typeof(ProjectResponseDto), 200)]
         public IActionResult GetProjectInfo(int projectId)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
@@ -51,7 +52,7 @@ namespace TextRepo.API.Controllers
             var project = _projectService.Get(projectId);
             if (!HasAccess(user, project))
             {
-                return Unauthorized();
+                return Forbid();
             }
             
             if (project is null)
@@ -69,6 +70,7 @@ namespace TextRepo.API.Controllers
         [HttpPost]
         [Authorize]
         [Route("create")]
+        [ProducesResponseType(typeof(int), 200)]
         public IActionResult CreateProject()
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
@@ -93,7 +95,7 @@ namespace TextRepo.API.Controllers
             var project = _projectService.Get(projectId);
             if (!HasAccess(user, project))
             {
-                return Unauthorized();
+                return Forbid();
             }
 
             var newProject = _mapper.Map<Project>(projectRequest);
@@ -118,7 +120,7 @@ namespace TextRepo.API.Controllers
             var project = _projectService.Get(projectId);
             if (!HasAccess(user, project))
             {
-                return Unauthorized();
+                return Forbid();
             }
 
             var addedUser = _userService.Get(addedUserId);
@@ -146,7 +148,7 @@ namespace TextRepo.API.Controllers
             var project = _projectService.Get(projectId);
             if (!HasAccess(user, project))
             {
-                return Unauthorized();
+                return Forbid();
             }
             
             _projectService.Delete(project!);
@@ -162,6 +164,7 @@ namespace TextRepo.API.Controllers
         [HttpGet]
         [Authorize]
         [Route("{projectId}/users/{pageNo}")]
+        [ProducesResponseType(typeof(List<UserResponseDto>), 200)]
         public IActionResult ListUser(int projectId, int pageNo = 1)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
@@ -169,7 +172,7 @@ namespace TextRepo.API.Controllers
             var project = _projectService.Get(projectId);
             if (!HasAccess(user, project))
             {
-                return Unauthorized();
+                return Forbid();
             }
 
             return Ok(_userService.GetUsersInProjectPaginated(project!, pageNo, 50)
@@ -185,6 +188,7 @@ namespace TextRepo.API.Controllers
         [HttpPost]
         [Authorize]
         [Route("{projectId}/adddocument")]
+        [ProducesResponseType(typeof(int), 200)]
         public IActionResult CreateDocument(int projectId)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
@@ -192,7 +196,7 @@ namespace TextRepo.API.Controllers
             var project = _projectService.Get(projectId);
             if (!HasAccess(user, project))
             {
-                return Unauthorized();
+                return Forbid();
             }
 
             var doc = _documentService.CreateDocument(project!);
@@ -208,6 +212,7 @@ namespace TextRepo.API.Controllers
         [HttpGet]
         [Authorize]
         [Route("{projectId}/documents/{pageNo}")]
+        [ProducesResponseType(typeof(List<int>), 200)]
         public IActionResult ListDocuments(int projectId, int pageNo = 1)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
@@ -215,7 +220,7 @@ namespace TextRepo.API.Controllers
             var project = _projectService.Get(projectId);
             if (!HasAccess(user, project))
             {
-                return Unauthorized();
+                return Forbid();
             }
 
             var result = _documentService

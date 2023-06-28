@@ -39,6 +39,7 @@ namespace TextRepo.API.Controllers
         /// <param name="name"></param>
         /// <returns>Works as login for new user in success, otherwise 400</returns>
         [HttpPost]
+        [ProducesResponseType(typeof(AuthResponse), 200)]
         public IActionResult Register(string email, string password, string name)
         {
             if (_userService.ExistUser(email))

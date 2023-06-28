@@ -33,12 +33,13 @@ namespace TextRepo.API.Controllers
         }
 
         /// <summary>
-        /// Handles POST login request
+        /// Authentication
         /// </summary>
         /// <param name="email"></param>
         /// <param name="password"></param>
         /// <returns>AuthResponse with jwt on success, otherwise 401</returns>
         [HttpPost]
+        [ProducesResponseType(typeof(AuthResponse), 200)]
         public ActionResult<AuthResponse> Login(string email, string password)
         {
             var user = _userService.GetUser(email, password); 

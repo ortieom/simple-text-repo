@@ -42,6 +42,7 @@ namespace TextRepo.API.Controllers
         [HttpGet]
         [Authorize]
         [Route("{userId}")]
+        [ProducesResponseType(typeof(UserResponseDto), 200)]
         public IActionResult GetUserInfo(int userId)
         {
             var user = _userService.Get(userId);
@@ -157,6 +158,7 @@ namespace TextRepo.API.Controllers
         [HttpGet]
         [Authorize]
         [Route("{userId}/projects/{pageNo}")]
+        [ProducesResponseType(typeof(List<ProjectResponseDto>), 200)]
         public IActionResult ListProjects(int userId, int pageNo = 1)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
