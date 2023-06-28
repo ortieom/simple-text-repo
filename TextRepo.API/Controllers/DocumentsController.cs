@@ -53,7 +53,7 @@ namespace TextRepo.API.Controllers
                 return Unauthorized();
             }
 
-            return Ok(document);
+            return Ok(_mapper.Map<DocumentResponseDto>(document));
         }
         
         /// <summary>

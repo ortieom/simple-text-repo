@@ -60,7 +60,7 @@ namespace TextRepo.API.Controllers
         /// <param name="userId"></param>
         /// <param name="contactInfo"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPut]
         [Authorize]
         [Route("{userId}/contact")]
         public IActionResult SetUserContact(int userId, ContactInfoRequestDto contactInfo)
