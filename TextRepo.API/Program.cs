@@ -57,6 +57,9 @@ builder.Services.AddSwaggerGen(option =>
 builder.Services.AddDbContext<Context>(context =>
     context.UseSqlite(builder.Configuration.GetSection("Database:ConnectionString").Value));
 
+// automapper
+builder.Services.AddAutoMapper(typeof(AppMappingProfile));
+
 // load everything
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();

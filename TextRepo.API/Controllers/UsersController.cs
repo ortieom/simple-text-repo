@@ -1,7 +1,9 @@
+using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using TextRepo.API.Responses;
+using TextRepo.API.DataTransferObjects;
 using TextRepo.Commons.Models;
 using TextRepo.API.Services;
 namespace TextRepo.API.Controllers
@@ -14,40 +16,21 @@ namespace TextRepo.API.Controllers
     {
         private readonly UserService _userService;
         private readonly ProjectService _projectService;
+        private readonly IMapper _mapper;
         
         /// <summary>
         /// Creates UserController
         /// </summary>
         /// <param name="userService"></param>
         /// <param name="projectService"></param>
-        public UsersController(UserService userService, ProjectService projectService)
+        /// <param name="mapper"></param>
+        public UsersController(UserService userService, ProjectService projectService, IMapper mapper)
         {
             _userService = userService;
             _projectService = projectService;
+            _mapper = mapper;
         }
 
-        /// <summary>
-        /// Check whether performer of the action is actually itself
-        /// </summary>
-        /// <param name="identity"></param>
-        /// <param name="target"></param>
-        /// <returns></returns>
-        private bool HasAccess(ClaimsIdentity? identity, User? target)
-        {
-            if (identity is null || target is null)
-                return false;
-            
-            IEnumerable<Claim> claim = identity.Claims; 
-
-            var userEmailClaim = claim
-                .FirstOrDefault(x => x.Type == ClaimTypes.Email);
-
-            if (userEmailClaim is null)
-                return false;
-            
-            return userEmailClaim.Value == target.Email;
-        } 
-        
         /// <summary>
         /// Gets information about user with corresponding id
         /// </summary>
@@ -65,28 +48,27 @@ namespace TextRepo.API.Controllers
                 return NotFound();
             }
 
-            return Ok(user);
+            return Ok(_mapper.Map<UserResponseDto>(user));
         }
         
         /// <summary>
         /// Add contact information
         /// </summary>
         /// <param name="userId"></param>
-        /// <param name="type"></param>
-        /// <param name="value"></param>
+        /// <param name="contactInfo"></param>
         /// <returns></returns>
         [HttpPost]
         [Authorize]
         [Route("{userId}/setcontact")]
-        public IActionResult SetUserContact(int userId, string type, string value)
+        public IActionResult SetUserContact(int userId, ContactInfoRequestDto contactInfo)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             var user = _userService.Get(userId);
             if (!HasAccess(identity, user))
             {
-                return Unauthorized();
+                return Forbid();
             }
-            _userService.AddContactInfo(user!, type, value);
+            _userService.AddContactInfo(user!, _mapper.Map<ContactInfo>(contactInfo));
             return Ok();
         }
         
@@ -94,25 +76,24 @@ namespace TextRepo.API.Controllers
         /// Edit user's main data
         /// </summary>
         /// <param name="userId"></param>
-        /// <param name="name"></param>
-        /// <param name="surname"></param>
-        /// <param name="email"></param>
-        /// <param name="password"></param>
+        /// <param name="userRequest"></param>
         /// <returns></returns>
         [HttpPut]
         [Authorize]
         [Route("{userId}")]
-        public IActionResult EditUser(int userId, string? name = null, string? surname = null, string? email = null,
-            string? password = null)
+        public IActionResult EditUser(int userId, UserRequestDto userRequest)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             var user = _userService.Get(userId);
             if (!HasAccess(identity, user))
             {
-                return Unauthorized();
+                return Forbid();
             }
 
-            _userService.Edit(user!, name, surname, email, password);
+            var updatedUser = _mapper.Map<User>(userRequest);
+            updatedUser.Id = user!.Id;
+
+            _userService.Edit(user!, updatedUser);
             return Ok();
         }
         
@@ -130,7 +111,7 @@ namespace TextRepo.API.Controllers
             var user = _userService.Get(userId);
             if (!HasAccess(identity, user))
             {
-                return Unauthorized();
+                return Forbid();
             }
             
             _userService.Delete(user!);
@@ -152,11 +133,35 @@ namespace TextRepo.API.Controllers
             var user = _userService.Get(userId);
             if (!HasAccess(identity, user))
             {
-                return Unauthorized();
+                return Forbid();
             }
 
             return Ok(
-                _projectService.GetUserProjectsPaginated(user!, pageNo, 50));
+                _projectService.GetUserProjectsPaginated(user!, pageNo, 50)
+                    .Select(p => _mapper.Map<ProjectResponseDto>(p))
+                    .ToList());
         }
+        
+        /// <summary>
+        /// Check whether performer of the action is actually itself
+        /// </summary>
+        /// <param name="identity"></param>
+        /// <param name="target"></param>
+        /// <returns></returns>
+        private bool HasAccess(ClaimsIdentity? identity, User? target)
+        {
+            if (identity is null || target is null)
+                return false;
+            
+            IEnumerable<Claim> claim = identity.Claims; 
+
+            var userEmailClaim = claim
+                .FirstOrDefault(x => x.Type == ClaimTypes.Email);
+
+            if (userEmailClaim is null)
+                return false;
+            
+            return userEmailClaim.Value == target.Email;
+        } 
     }
 }

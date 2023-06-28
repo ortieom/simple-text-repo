@@ -50,6 +50,13 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// </summary>
         /// <param name="entities"></param>
         void RemoveRange(IEnumerable<TEntity> entities);
+
+        /// <summary>
+        /// Update old entity in storage with new
+        /// </summary>
+        /// <param name="oldEntity"></param>
+        /// <param name="newEntity"></param>
+        public void Update(TEntity oldEntity, TEntity newEntity);
         
         /// <summary>
         /// Commit pending changes

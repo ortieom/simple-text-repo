@@ -23,7 +23,7 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// <returns>UserInfo object</returns>
         public UserInfo? GetUserInfoById(int userId)
         {
-            var user = db.Users
+            var user = Db.Users
                 .Include(x => x.ContactInfo)
                 .SingleOrDefault(u => u.Id == userId);
 
@@ -37,7 +37,7 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// <returns>UserInfo object</returns>
         public UserInfo? GetUserInfoByEmail(string email)
         {
-            var user = db.Users
+            var user = Db.Users
                 .Include(x => x.ContactInfo)
                 .SingleOrDefault(u => u.Email == email);
 
@@ -53,7 +53,7 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// <returns>Users in project on selected page</returns>
         public ICollection<User> GetUsersInProject(Project project, int pageNo, int pageSize = 50)  // TODO: id
         {
-            return db.Projects
+            return Db.Projects
                 .Where(x => x.Id == project.Id)
                 .SelectMany(s => s.Users)                
                 .OrderBy(c => c.Id)

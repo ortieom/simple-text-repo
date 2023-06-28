@@ -26,7 +26,7 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// <returns>User's projects on selected page</returns>
         public ICollection<Project> GetUserProjects(User user, int pageNo, int pageSize = 50)
         {
-            return db.Users
+            return Db.Users
                 .Where(x => x.Id == user.Id)
                 .SelectMany(s => s.Projects)                
                 .OrderBy(c => c.Id)
@@ -43,7 +43,7 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// <returns></returns>
         public bool ProjectContainUser(Project project, User user)
         {
-            return db.Projects
+            return Db.Projects
                 .Where(p =>
                     p.Users.Any(u => u.Id == user.Id))
                 .Where(p => p.Id == project.Id)

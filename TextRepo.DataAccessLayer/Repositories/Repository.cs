@@ -9,7 +9,7 @@ namespace TextRepo.DataAccessLayer.Repositories
     /// <typeparam name="TEntity"></typeparam>
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        protected readonly Context db;
+        protected readonly Context Db;
         private readonly DbSet<TEntity> _entities;
 
         /// <summary>
@@ -18,8 +18,8 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// <param name="context"></param>
         public Repository(DbContext context)
         {
-            db = (Context)context;
-            _entities = db.Set<TEntity>();
+            Db = (Context)context;
+            _entities = Db.Set<TEntity>();
         }
 
         /// <summary>
@@ -98,6 +98,25 @@ namespace TextRepo.DataAccessLayer.Repositories
         {
             _entities.RemoveRange(entities);
         }
+        
+        /// <summary>
+        /// Update old entity in storage with new
+        /// </summary>
+        /// <param name="oldEntity"></param>
+        /// <param name="newEntity"></param>
+        public void Update(TEntity oldEntity, TEntity newEntity)
+        {
+            // iterating over all properties and updating non-null ones
+            foreach(var toProp in typeof(TEntity).GetProperties())
+            {
+                var fromProp= typeof(TEntity).GetProperty(toProp.Name);
+                var toValue = fromProp!.GetValue(newEntity, null);
+                if (toValue != null)
+                {
+                    toProp.SetValue(oldEntity, toValue, null);
+                }
+            }
+        }
 
         /// <summary>
         /// Commit pending changes
@@ -105,7 +124,7 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// <returns></returns>
         public int Commit()
         {
-            return db.SaveChanges();
+            return Db.SaveChanges();
         }
     }
 }

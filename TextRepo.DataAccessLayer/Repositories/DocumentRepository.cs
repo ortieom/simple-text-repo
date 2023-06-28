@@ -25,7 +25,7 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// <returns>Project documents in selected page</returns>
         public ICollection<Document> GetDocumentsInProject(Project project, int pageNo, int pageSize = 50)
         {
-            return db.Documents
+            return Db.Documents
                 .Where(d => d.Project == project)
                 .OrderBy(d => d.Id)
                 .Skip((pageNo - 1) * pageSize)
@@ -41,7 +41,7 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// <returns></returns>
         public bool DocumentAccessibleToUser(Document document, User user)
         {
-            return db.ProjectUser
+            return Db.ProjectUser
                 .Count(pu => pu.ProjectId == document.ProjectId && pu.UserId == user.Id) > 0;
         }
     }
