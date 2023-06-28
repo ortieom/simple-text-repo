@@ -16,6 +16,7 @@ namespace TextRepo.API.Controllers
     {
         private readonly UserService _userService;
         private readonly ProjectService _projectService;
+        private readonly ContactService _contactService;
         private readonly IMapper _mapper;
         
         /// <summary>
@@ -24,10 +25,12 @@ namespace TextRepo.API.Controllers
         /// <param name="userService"></param>
         /// <param name="projectService"></param>
         /// <param name="mapper"></param>
-        public UsersController(UserService userService, ProjectService projectService, IMapper mapper)
+        public UsersController(UserService userService, ProjectService projectService, 
+            ContactService contactService, IMapper mapper)
         {
             _userService = userService;
             _projectService = projectService;
+            _contactService = contactService;
             _mapper = mapper;
         }
 
@@ -59,7 +62,7 @@ namespace TextRepo.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Authorize]
-        [Route("{userId}/setcontact")]
+        [Route("{userId}/contact")]
         public IActionResult SetUserContact(int userId, ContactInfoRequestDto contactInfo)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
@@ -68,7 +71,34 @@ namespace TextRepo.API.Controllers
             {
                 return Forbid();
             }
+
+            if (user!.ContactInfo is not null)
+            {
+                _contactService.DeleteContact(user);
+            }
+            
             _userService.AddContactInfo(user!, _mapper.Map<ContactInfo>(contactInfo));
+            return Ok();
+        }
+        
+        /// <summary>
+        /// Remove user's contact
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        [Authorize]
+        [Route("{userId}/contact")]
+        public IActionResult DeleteContact(int userId)
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var user = _userService.Get(userId);
+            if (!HasAccess(identity, user))
+            {
+                return Forbid();
+            }
+            
+            _contactService.DeleteContact(user!);
             return Ok();
         }
         
