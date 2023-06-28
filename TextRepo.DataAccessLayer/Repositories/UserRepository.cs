@@ -12,7 +12,7 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// Creates UserRepository with basic Repository methods
         /// </summary>
         /// <param name="context"></param>
-        public UserRepository(DbContext context) : base(context)
+        public UserRepository(Context context) : base(context)
         {
         }
 
@@ -23,17 +23,11 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// <returns>UserInfo object</returns>
         public UserInfo? GetUserInfoById(int userId)
         {
-            var request = db.Users
-                .Where(u => u.Id == userId)
-                .GroupJoin(
-                    db.Contacts, 
-                    u => u.Id,
-                    ci => ci.User.Id,
-                    (x,y) => new { User = x, ContactInfos = y })
-                .SelectMany(
-                    x => x.ContactInfos.DefaultIfEmpty(),
-                    (x,y) => new UserInfo() { User = x.User, ContactInfo = y});
-            return request.SingleOrDefault();
+            var user = Db.Users
+                .Include(x => x.ContactInfo)
+                .SingleOrDefault(u => u.Id == userId);
+
+            return user is null ? null : new UserInfo {User = user, ContactInfo = user?.ContactInfo};
         }
 
         /// <summary>
@@ -43,17 +37,11 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// <returns>UserInfo object</returns>
         public UserInfo? GetUserInfoByEmail(string email)
         {
-            var request = db.Users
-                .Where(u => u.Email == email)
-                .GroupJoin(
-                    db.Contacts, 
-                    u => u.Id,
-                    ci => ci.User.Id,
-                    (x,y) => new { User = x, ContactInfos = y })
-                .SelectMany(
-                    x => x.ContactInfos.DefaultIfEmpty(),
-                    (x,y) => new UserInfo() { User = x.User, ContactInfo = y});
-            return request.SingleOrDefault();
+            var user = Db.Users
+                .Include(x => x.ContactInfo)
+                .SingleOrDefault(u => u.Email == email);
+
+            return user is null ? null : new UserInfo {User = user, ContactInfo = user?.ContactInfo};
         }
 
         /// <summary>
@@ -63,10 +51,11 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// <param name="pageNo">Number of requested page (start with 1)</param>
         /// <param name="pageSize">Count of objects on one page</param>
         /// <returns>Users in project on selected page</returns>
-        public ICollection<User> GetUsersInProject(Project project, int pageNo, int pageSize = 50)
+        public ICollection<User> GetUsersInProject(Project project, int pageNo, int pageSize = 50)  // TODO: id
         {
-            return db.Users
-                .Where(u => u.Projects.Any(p => p.Id == project.Id))
+            return Db.Projects
+                .Where(x => x.Id == project.Id)
+                .SelectMany(s => s.Users)                
                 .OrderBy(c => c.Id)
                 .Skip((pageNo - 1) * pageSize)
                 .Take(pageSize)

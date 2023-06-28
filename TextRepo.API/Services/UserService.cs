@@ -3,7 +3,7 @@ using TextRepo.DataAccessLayer;
 using BC = BCrypt.Net.BCrypt;
 using TextRepo.DataAccessLayer.Repositories;
 
-namespace TextRepo.Services
+namespace TextRepo.API.Services
 {
     /// <summary>
     /// Business logic layer for users
@@ -22,35 +22,13 @@ namespace TextRepo.Services
         }
 
         /// <summary>
-        /// Get hashed password
-        /// </summary>
-        /// <param name="password"></param>
-        /// <returns>Hashed password</returns>
-        private string HashPassword(string password)
-        {
-            return BC.HashPassword(password);
-        }
-
-        /// <summary>
-        /// Compare stored password with one provided by user
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        private bool ValidatePassword(User user, string password)
-        {
-            return BC.Verify(password, user.HashedPassword);
-            ;
-        }
-
-        /// <summary>
         /// Get user by id
         /// </summary>
         /// <param name="id"></param>
         /// <returns>User with corresponding id</returns>
         public User? Get(int id)
         {
-            return _repo.Get(id);
+            return _repo.GetUserInfoById(id)?.User;
         }
         
         /// <summary>
@@ -98,18 +76,12 @@ namespace TextRepo.Services
         /// Save contact info for user
         /// </summary>
         /// <param name="user"></param>
-        /// <param name="type"></param>
-        /// <param name="value"></param>
+        /// <param name="contactInfo"></param>
         /// <returns>New ContactInfo object</returns>
-        public ContactInfo AddContactInfo(User user, string type, string value)
+        public void AddContactInfo(User user, ContactInfo contactInfo)
         {
-            ContactInfo contact = new() { Type = type, Value = value, User = user };
-
-            user.ContactInfo = contact;
-
+            user.ContactInfo = contactInfo;
             _repo.Commit();
-
-            return contact;
         }
 
         /// <summary>
@@ -147,21 +119,20 @@ namespace TextRepo.Services
         /// Provide only arguments whose columns must be updated
         /// </summary>
         /// <param name="user"></param>
-        /// <param name="name"></param>
-        /// <param name="surname"></param>
-        /// <param name="email"></param>
-        /// <param name="password"></param>
+        /// <param name="updatedUser"></param>
         /// <returns>Updated User object</returns>
-        public User Edit(User user, string? name = null, string? surname = null, string? email = null,
-            string? password = null)
+        public User Edit(User user, User updatedUser)
         {
-            user.Name = name ?? user.Name;
-            user.Surname = surname ?? user.Surname;
-            user.Email = email ?? user.Email;
-            if (password != null)
+            if (updatedUser.HashedPassword != "")
             {
-                user.HashedPassword = HashPassword(password);
+                updatedUser.HashedPassword = HashPassword(updatedUser.HashedPassword);
             }
+            else
+            {
+                updatedUser.HashedPassword = user.HashedPassword;
+            }
+            
+            _repo.Update(user, updatedUser);
 
             _repo.Commit();
             return user;
@@ -177,6 +148,25 @@ namespace TextRepo.Services
             _repo.Commit();
         }
 
-        
+        /// <summary>
+        /// Get hashed password
+        /// </summary>
+        /// <param name="password"></param>
+        /// <returns>Hashed password</returns>
+        private string HashPassword(string password)
+        {
+            return BC.HashPassword(password);
+        }
+
+        /// <summary>
+        /// Compare stored password with one provided by user
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        private bool ValidatePassword(User user, string password)
+        {
+            return BC.Verify(password, user.HashedPassword);
+        }
     }
 }

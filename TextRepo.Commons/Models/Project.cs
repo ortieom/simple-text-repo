@@ -27,5 +27,9 @@
         /// References to all users who have access to this project
         /// </summary>
         public List<User> Users { get; set; } = new(); // transparent many-to-many
+        /// <summary>
+        /// Reference to all user-project joining entities
+        /// </summary>
+        public List<ProjectUser> ProjectUsers { get; set; } = new(); // one project to many entities
     }
 }

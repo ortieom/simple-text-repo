@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TextRepo.Commons.Models;
 
-namespace TextRepo.Commons.ModelConfigs
+namespace TextRepo.DataAccessLayer.ModelConfigs
 {
     /// <summary>
     /// Implements IEntityTypeConfiguration interface defining Project configuration
@@ -15,6 +15,12 @@ namespace TextRepo.Commons.ModelConfigs
         /// <param name="builder"></param>
         public void Configure(EntityTypeBuilder<Project> builder)
         {
+            // many projects to many users
+            builder
+                .HasMany(p => p.Users)
+                .WithMany(u => u.Projects)
+                .UsingEntity<ProjectUser>();
+            
             // one project to many documents
             builder
                 .HasMany(p => p.Documents)

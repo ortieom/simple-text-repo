@@ -12,7 +12,7 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// Creates DocumentRepository with basic Repository methods
         /// </summary>
         /// <param name="context"></param>
-        public DocumentRepository(DbContext context) : base(context)
+        public DocumentRepository(Context context) : base(context)
         {
         }
 
@@ -25,7 +25,7 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// <returns>Project documents in selected page</returns>
         public ICollection<Document> GetDocumentsInProject(Project project, int pageNo, int pageSize = 50)
         {
-            return db.Documents
+            return Db.Documents
                 .Where(d => d.Project == project)
                 .OrderBy(d => d.Id)
                 .Skip((pageNo - 1) * pageSize)
@@ -41,11 +41,8 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// <returns></returns>
         public bool DocumentAccessibleToUser(Document document, User user)
         {
-            return db.Projects
-                .Where(p =>
-                    p.Users.Any(u => u.Id == user.Id))
-                .Where(p => p.Id == document.ProjectId)
-                .ToList().Count != 0;
+            return Db.ProjectUser
+                .Count(pu => pu.ProjectId == document.ProjectId && pu.UserId == user.Id) > 0;
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using TextRepo.Commons.Models;
 using TextRepo.DataAccessLayer.Repositories;
 
-namespace TextRepo.Services
+namespace TextRepo.API.Services
 {
     /// <summary>
     /// Business logic layer for documents
@@ -72,18 +72,13 @@ namespace TextRepo.Services
         /// Edit document with optional parameters.
         /// Provide only arguments whose columns must be updated
         /// </summary>
-        /// <param name="doc"></param>
-        /// <param name="title"></param>
-        /// <param name="description"></param>
-        /// <param name="text"></param>
+        /// <param name="oldDoc"></param>
+        /// <param name="newDoc"></param>
         /// <returns>Updated Document</returns>
-        public Document Edit(Document doc, string? title = null, string? description = null, string? text = null)
+        public void Edit(Document oldDoc, Document newDoc)
         {
-            doc.Title = title ?? doc.Title;
-            doc.Description = description ?? doc.Description;
-            doc.Contents = text ?? doc.Contents;
+            _repo.Update(oldDoc, newDoc);
             _repo.Commit();
-            return doc;
         }
         
         /// <summary>

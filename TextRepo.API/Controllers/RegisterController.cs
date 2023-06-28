@@ -5,7 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using TextRepo.API.Tools;
 using TextRepo.API.Responses;
-using TextRepo.Services;
+using TextRepo.API.Services;
 
 namespace TextRepo.API.Controllers
 {
@@ -13,7 +13,7 @@ namespace TextRepo.API.Controllers
     /// Registration 
     /// </summary>
     [ApiController]
-    [Route("register")]
+    [Route("[controller]")]
     [Produces("application/json")]
     public class RegisterController : Controller
     {
@@ -39,6 +39,7 @@ namespace TextRepo.API.Controllers
         /// <param name="name"></param>
         /// <returns>Works as login for new user in success, otherwise 400</returns>
         [HttpPost]
+        [ProducesResponseType(typeof(AuthResponse), 200)]
         public IActionResult Register(string email, string password, string name)
         {
             if (_userService.ExistUser(email))

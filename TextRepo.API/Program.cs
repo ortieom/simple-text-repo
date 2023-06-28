@@ -7,15 +7,12 @@ using TextRepo.API;
 using TextRepo.API.Tools;
 using TextRepo.DataAccessLayer;
 using TextRepo.DataAccessLayer.Repositories;
-using TextRepo.Services;
+using TextRepo.API.Services;
 using NLog;
 using NLog.Extensions.Logging;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Settings location
-builder.Configuration.SetBasePath(Directory.GetCurrentDirectory());
-builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
 // IOptions
 builder.Services.AddOptions<DbSettingsModel>().Bind(builder.Configuration.GetSection("Database"));
@@ -55,10 +52,19 @@ builder.Services.AddSwaggerGen(option =>
             new string[]{}
         }
     });
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    option.IncludeXmlComments(xmlPath);
 });
 
+// database
+builder.Services.AddDbContext<Context>(context =>
+    context.UseSqlite(builder.Configuration.GetSection("Database:ConnectionString").Value));
+
+// automapper
+builder.Services.AddAutoMapper(typeof(AppMappingProfile));
+
 // load everything
-builder.Services.AddScoped<DbContext, Context>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();

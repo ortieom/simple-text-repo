@@ -1,19 +1,14 @@
-﻿namespace TextRepo.Commons.Models
+namespace TextRepo.API.DataTransferObjects
 {
     /// <summary>
-    /// Represents optional contact information for user
+    /// Represents DTO for ContactInfo in response
     /// </summary>
-    public class ContactInfo
+    public class ContactInfoResponseDto
     {
         /// <summary>
-        /// Primary key
+        /// Primary user key
         /// </summary>
         public int Id { get; set; }
-        /// <summary>
-        /// Reference to holder of this property
-        /// </summary>
-        public User User { get; set; } = null!;
-    
         /// <summary>
         /// Represents type of contact (email, tg, etc.)
         /// </summary>

@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using TextRepo.Commons.ModelConfigs;
+using TextRepo.DataAccessLayer.ModelConfigs;
 using TextRepo.Commons.Models;
 namespace TextRepo.DataAccessLayer
 {
@@ -10,7 +9,9 @@ namespace TextRepo.DataAccessLayer
     /// </summary>
     public class Context : DbContext
     {
-        private readonly ILoggerFactory _loggerFactory;
+        public Context(DbContextOptions<Context> options) : base(options)
+        {
+        }
         
         /// <summary>
         /// A set that is used to query and save User instances  
@@ -28,32 +29,10 @@ namespace TextRepo.DataAccessLayer
         /// A set that is used to query and save Contacts instances  
         /// </summary>
         public DbSet<ContactInfo> Contacts => Set<ContactInfo>();
-
-        private string DbPath { get; }
-        private readonly bool _verbose;
-
         /// <summary>
-        /// Default constructor with parameters
+        /// A set that is used to query and save ProjectUser joining instances  
         /// </summary>
-        /// <param name="loggerFactory"></param>
-        /// <param name="options"></param>
-        public Context(ILoggerFactory loggerFactory, IOptions<DbSettingsModel> options)
-        {
-            _loggerFactory = loggerFactory;
-            DbPath = options.Value.ConnectionString;
-            _verbose = options.Value.Verbose;
-        }
-
-        /// <summary>
-        /// Configure context with chosen data provider
-        /// </summary>
-        /// <param name="optionsBuilder"></param>
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlite($"Data Source={DbPath}");
-            if (_verbose)
-                optionsBuilder.UseLoggerFactory(_loggerFactory);
-        }
+        public DbSet<ProjectUser> ProjectUser => Set<ProjectUser>();
 
         /// <summary>
         /// Fluent API configurations
@@ -70,3 +49,4 @@ namespace TextRepo.DataAccessLayer
         }
     }
 }
+// ExplicitProjectUserConnection

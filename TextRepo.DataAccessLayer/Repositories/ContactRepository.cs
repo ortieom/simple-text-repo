@@ -12,7 +12,7 @@ namespace TextRepo.DataAccessLayer.Repositories
         /// Creates ContactRepository with basic Repository methods
         /// </summary>
         /// <param name="context"></param>
-        public ContactRepository(DbContext context) : base(context)
+        public ContactRepository(Context context) : base(context)
         {
         }
     }

@@ -1,6 +1,6 @@
 using System.Security.Claims;
 using TextRepo.Commons.Models;
-using TextRepo.Services;
+using TextRepo.API.Services;
 namespace TextRepo.API.Tools
 {
     /// <summary>
@@ -14,7 +14,7 @@ namespace TextRepo.API.Tools
         /// <param name="identity"></param>
         /// <param name="userService"></param>
         /// <returns></returns>
-        public static User? getUser(ClaimsIdentity? identity, UserService userService)
+        public static User? GetUser(ClaimsIdentity? identity, UserService userService)
         {
             if (identity is null)
                 return null;

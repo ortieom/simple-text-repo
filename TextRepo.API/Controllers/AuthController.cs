@@ -6,7 +6,7 @@ using System.Net;
 using System.Security.Claims;
 using TextRepo.API.Tools;
 using TextRepo.API.Responses;
-using TextRepo.Services;
+using TextRepo.API.Services;
 
 namespace TextRepo.API.Controllers
 {
@@ -14,7 +14,7 @@ namespace TextRepo.API.Controllers
     /// Login form 
     /// </summary>
     [ApiController]
-    [Route("login")]
+    [Route("[controller]")]
     [Produces("application/json")]
     public class LoginController : Controller
     {
@@ -31,31 +31,15 @@ namespace TextRepo.API.Controllers
             _authOptions = authOptions;
             _userService = userService;
         }
-        
+
         /// <summary>
-        /// Handles GET request - returns login form with email and password
-        /// </summary>
-        [HttpGet]
-        public async Task Login()
-        {
-            string content = @"<form method='post'>
-                <label>Email:</label><br />
-                <input email='email' /><br />
-                <label>Password:</label><br />
-                <input type='password' name='password' /><br />
-                <input type='submit' value='Send' />
-            </form>";
-            Response.ContentType = "text/html;charset=utf-8";
-            await Response.WriteAsync(content);
-        }
-        
-        /// <summary>
-        /// Handles POST login request
+        /// Authentication
         /// </summary>
         /// <param name="email"></param>
         /// <param name="password"></param>
         /// <returns>AuthResponse with jwt on success, otherwise 401</returns>
         [HttpPost]
+        [ProducesResponseType(typeof(AuthResponse), 200)]
         public ActionResult<AuthResponse> Login(string email, string password)
         {
             var user = _userService.GetUser(email, password); 

@@ -1,7 +1,7 @@
 ﻿using TextRepo.Commons.Models;
 using TextRepo.DataAccessLayer.Repositories;
 
-namespace TextRepo.Services
+namespace TextRepo.API.Services
 {
     /// <summary>
     /// Business logic layer for projects
@@ -61,11 +61,10 @@ namespace TextRepo.Services
         /// <param name="user"></param>
         /// <param name="project"></param>
         /// <returns>Updated Project</returns>
-        public Project AddUserToProject(User user, Project project)
+        public void AddUserToProject(User user, Project project)
         {
             project.Users.Add(user);
             _repo.Commit();
-            return project;
         }
 
         /// <summary>
@@ -84,17 +83,13 @@ namespace TextRepo.Services
         /// Edit project with optional parameters.
         /// Provide only arguments whose columns must be updated
         /// </summary>
-        /// <param name="project"></param>
-        /// <param name="name"></param>
-        /// <param name="description"></param>
+        /// <param name="oldProject"></param>
+        /// <param name="newProject"></param>
         /// <returns>Updated Project</returns>
-        public Project Edit(Project project, string? name = null, string? description = null)
+        public void Edit(Project oldProject, Project newProject)
         {
-            project.Name = name ?? project.Name;
-            project.Description = description ?? project.Description;
-
+            _repo.Update(oldProject, newProject);
             _repo.Commit();
-            return project;
         }
 
         /// <summary>
