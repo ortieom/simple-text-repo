@@ -160,12 +160,13 @@ namespace TextRepo.API.Controllers
         /// </summary>
         /// <param name="projectId"></param>
         /// <param name="pageNo">from 1</param>
+        /// <param name="pageSize"></param>
         /// <returns></returns>
         [HttpGet]
         [Authorize]
         [Route("{projectId}/users/{pageNo}")]
         [ProducesResponseType(typeof(List<UserResponseDto>), 200)]
-        public IActionResult ListUser(int projectId, int pageNo = 1)
+        public IActionResult ListUser(int projectId, int pageNo = 1, int pageSize = 50)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             var user = TokenEntities.GetUser(identity, _userService);
@@ -175,7 +176,7 @@ namespace TextRepo.API.Controllers
                 return Forbid();
             }
 
-            return Ok(_userService.GetUsersInProjectPaginated(project!, pageNo, 50)
+            return Ok(_userService.GetUsersInProjectPaginated(project!, pageNo, pageSize)
                 .Select(u => _mapper.Map<UserResponseDto>(u))
                 .ToList());
         }
@@ -208,12 +209,13 @@ namespace TextRepo.API.Controllers
         /// </summary>
         /// <param name="projectId"></param>
         /// <param name="pageNo">from 1</param>
+        /// <param name="pageSize"></param>
         /// <returns></returns>
         [HttpGet]
         [Authorize]
         [Route("{projectId}/documents/{pageNo}")]
         [ProducesResponseType(typeof(List<int>), 200)]
-        public IActionResult ListDocuments(int projectId, int pageNo = 1)
+        public IActionResult ListDocuments(int projectId, int pageNo = 1, int pageSize = 50)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             var user = TokenEntities.GetUser(identity, _userService);
@@ -224,7 +226,7 @@ namespace TextRepo.API.Controllers
             }
 
             var result = _documentService
-                .GetProjectDocumentsPaginated(project!, pageNo, 50)
+                .GetProjectDocumentsPaginated(project!, pageNo, pageSize)
                 .Select(d => d.Id).ToList();
             
             return Ok(result);

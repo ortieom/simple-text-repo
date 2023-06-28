@@ -154,12 +154,13 @@ namespace TextRepo.API.Controllers
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="pageNo">from 1</param>
+        /// <param name="pageSize"></param>
         /// <returns></returns>
         [HttpGet]
         [Authorize]
         [Route("{userId}/projects/{pageNo}")]
         [ProducesResponseType(typeof(List<ProjectResponseDto>), 200)]
-        public IActionResult ListProjects(int userId, int pageNo = 1)
+        public IActionResult ListProjects(int userId, int pageNo = 1, int pageSize = 50)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             var user = _userService.Get(userId);
@@ -169,7 +170,7 @@ namespace TextRepo.API.Controllers
             }
 
             return Ok(
-                _projectService.GetUserProjectsPaginated(user!, pageNo, 50)
+                _projectService.GetUserProjectsPaginated(user!, pageNo, pageSize)
                     .Select(p => _mapper.Map<ProjectResponseDto>(p))
                     .ToList());
         }
